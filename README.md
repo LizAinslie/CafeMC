@@ -15,6 +15,7 @@ and follow the rules!
   - [x] `/afk`
   - [x] AFK Players are shown in the tab list and do not count towards the sleep counter
   - [ ] Players are automatically set as AFK after 5 minutes of inactivity
+  - [ ] AFK players will be updated to not AFK if they move
 - [ ] Economy system (TBD whether to use a plugin or custom implementation)
   - [ ] `/balance`, `/pay`, `/shop` 
   - [ ] Economy system will be used for player shops and trading
