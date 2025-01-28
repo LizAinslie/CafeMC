@@ -24,11 +24,10 @@ object ChatHandler : Listener {
 
     @EventHandler
     fun onPlayerChat(event: AsyncPlayerChatEvent) {
-        val displayName = event.player.displayName
         val afkStatus = if (AfkMap.isAfk(event.player)) "${ChatColor.BOLD}AFK${ChatColor.RESET} " else ""
 
-        var message = ChatColor.translateAlternateColorCodes('&', event.message)
+        event.message = ChatColor.translateAlternateColorCodes('&', event.message)
 
-        event.format = "${ChatColor.GRAY}[$afkStatus${ChatColor.GOLD}${displayName}${ChatColor.GRAY}]${ChatColor.RESET} $message"
+        event.format = "${ChatColor.GRAY}[$afkStatus${ChatColor.GOLD}%1\$s${ChatColor.GRAY}]${ChatColor.RESET} %2\$s"
     }
 }
