@@ -8,6 +8,7 @@ import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
 import org.bukkit.Bukkit
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 object TpaCommand : PluginCommand(
@@ -28,5 +29,11 @@ object TpaCommand : PluginCommand(
         }
 
         TpaMap.addRequest(player, target)
+    }
+
+    override fun tabComplete(sender: CommandSender, args: List<String>) = when (args.size) {
+        0 -> Bukkit.getOnlinePlayers().map { it.name }
+        1 -> Bukkit.getOnlinePlayers().map { it.name }.filter { it.startsWith(args[0], ignoreCase = true) }
+        else -> emptyList()
     }
 }
