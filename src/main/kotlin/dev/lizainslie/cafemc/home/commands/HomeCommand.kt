@@ -46,6 +46,11 @@ object HomeCommand : PluginCommand(
             
             when (args[0]) {
                 "set" -> {
+                    if (settings.home != null) {
+                        settings.home!!.delete()
+                        settings.home = null
+                    }
+                    
                     settings.home = SavedLocation.createFromBukkit(player.location)
                     player.sendMessage("${ChatColor.GRAY}Home set.")
                 }
@@ -70,7 +75,7 @@ object HomeCommand : PluginCommand(
     override fun tabComplete(sender: CommandSender, args: List<String>) = 
         when (args.size) {
             0 -> SUBCOMMANDS
-            1 -> SUBCOMMANDS.filter { it.startsWith(args[0]) }
+            1 -> SUBCOMMANDS.filter { it.startsWith(args[0], ignoreCase = true) }
             else -> emptyList()
         }
 }
