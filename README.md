@@ -30,9 +30,9 @@ defeated in a few minutes :3
 
 Thanks to `SirOwlie` (Minecraft IGN) for the screenshots!
 
-![](https://media.essential.gg/5d367dc8-c118-4c21-668e-84cacd5d5a00)
-![](https://media.essential.gg/2ce6c31c-8cf9-446e-9912-c258b4cf1f00)
-![](https://media.essential.gg/6e80a8cd-56af-45a9-0cb7-838a851e5e00)
+![](https://imagedelivery.net/W9K_l6ndK9x4x8m3rurakg/6e80a8cd-56af-45a9-0cb7-838a851e5e00/original)
+![](https://imagedelivery.net/W9K_l6ndK9x4x8m3rurakg/2ce6c31c-8cf9-446e-9912-c258b4cf1f00/original)
+![](https://imagedelivery.net/W9K_l6ndK9x4x8m3rurakg/5d367dc8-c118-4c21-668e-84cacd5d5a00/original)
   
 ## Contributing
 If you would like to contribute to the plugin, feel free to fork the repository and submit a pull request. I will review
