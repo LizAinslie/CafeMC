@@ -2,7 +2,7 @@
 > A custom plugin for my Minecraft SMP server.
 
 ## Want to join?
-If you want to join the server, you can join the discord server [here](https://discord.gg/). Just be, friendly, active,
+If you want to join the server, you can join the discord server [here](https://discord.gg/). Just be friendly & active,
 and follow the rules!
 
 ## Features
