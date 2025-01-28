@@ -1,0 +1,45 @@
+name: CafeMC
+version: '0.1.0'
+main: dev.lizainslie.cafemc.CafeMC
+api-version: '1.21'
+
+commands:
+  tpa:
+    description: Teleport to a player
+    usage: /<command> <player>
+  tpaccept:
+    description: Accept a teleport request
+    usage: /<command>
+  tpdeny:
+    description: Deny a teleport request
+    usage: /<command>
+  afk:
+    description: Toggle AFK status
+    usage: /<command>
+  rename:
+    description: Rename the item in your hand
+    usage: /<command> <name>
+  home:
+    description: Teleport to & set your home
+    usage: /<command> [set|clear]
+#  warp:
+#    description: Teleport to a warp
+#    usage: /<command> <warp>
+#  setwarp:
+#    description: Set a warp
+#    usage: /<command> <warp>
+#    permission: cafemc.warp.set
+#  delwarp:
+#    description: Delete a warp
+#    usage: /<command> <warp>
+#    permission: cafemc.warp.delete
+#  warps:
+#    description: List all warps
+#    usage: /<command>
+#  playerwarp:
+#    description: Manage your player warps
+#    usage: /<command> <create|delete>
+#    permission: cafemc.playerwarp
+#  pwarp:
+#    description: Teleport to a player warp
+#    usage: /<command> <player>
