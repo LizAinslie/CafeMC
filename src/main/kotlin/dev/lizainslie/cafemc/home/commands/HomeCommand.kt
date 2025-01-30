@@ -4,9 +4,7 @@ import dev.lizainslie.cafemc.chat.AllowedSender
 import dev.lizainslie.cafemc.chat.PluginCommand
 import dev.lizainslie.cafemc.data.location.SavedLocation
 import dev.lizainslie.cafemc.data.player.PlayerSettings
-import org.bukkit.Bukkit
 import org.bukkit.ChatColor
-import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -38,16 +36,11 @@ object HomeCommand : PluginCommand(
                 player.sendMessage("${ChatColor.GRAY}Teleported to your home.")
                 return@transaction
             }
-
-            if (args[0] !in SUBCOMMANDS) {
-                sendError("Invalid subcommand ${args[0]}.")
-                return@transaction
-            }
             
             when (args[0]) {
                 "set" -> {
-                    if (settings.home != null) {
-                        settings.home!!.delete()
+                    settings.home?.let { 
+                        it.delete()
                         settings.home = null
                     }
                     
@@ -67,7 +60,7 @@ object HomeCommand : PluginCommand(
                     player.sendMessage("${ChatColor.GRAY}Home cleared.")
                 }
 
-                else -> sendError("Invalid argument.")
+                else -> sendError("Invalid subcommand ${args[0]}.")
             }
         }
     }
