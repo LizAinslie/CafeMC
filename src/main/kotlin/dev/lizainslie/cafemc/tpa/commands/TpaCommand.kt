@@ -1,12 +1,8 @@
 package dev.lizainslie.cafemc.tpa.commands
 
-import dev.lizainslie.cafemc.chat.AllowedSender
-import dev.lizainslie.cafemc.chat.PluginCommand
-import dev.lizainslie.cafemc.tpa.TpaMap
-import net.md_5.bungee.api.ChatColor
-import net.md_5.bungee.api.chat.ClickEvent
-import net.md_5.bungee.api.chat.ComponentBuilder
-import net.md_5.bungee.api.chat.HoverEvent
+import dev.lizainslie.cafemc.chat.cmd.AllowedSender
+import dev.lizainslie.cafemc.chat.cmd.PluginCommand
+import dev.lizainslie.cafemc.tpa.TpaModule
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -28,7 +24,7 @@ object TpaCommand : PluginCommand(
             return
         }
 
-        TpaMap.addRequest(player, target)
+        TpaModule.addRequest(player, target)
     }
 
     override fun tabComplete(sender: CommandSender, args: List<String>) = when (args.size) {

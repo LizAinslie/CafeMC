@@ -1,4 +1,4 @@
-package dev.lizainslie.cafemc.chat
+package dev.lizainslie.cafemc.chat.cmd
 
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender

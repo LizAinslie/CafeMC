@@ -1,11 +1,13 @@
 package dev.lizainslie.cafemc
 
+import dev.lizainslie.cafemc.afk.AfkModule
 import dev.lizainslie.cafemc.afk.commands.AfkCommand
 import dev.lizainslie.cafemc.chat.ChatHandler
-import dev.lizainslie.cafemc.chat.CommandMap
-import dev.lizainslie.cafemc.chat.commands.RenameCommand
+import dev.lizainslie.cafemc.chat.cmd.CommandMap
+import dev.lizainslie.cafemc.commands.RenameCommand
 import dev.lizainslie.cafemc.home.commands.HomeCommand
 import dev.lizainslie.cafemc.slime.SlimeListener
+import dev.lizainslie.cafemc.tpa.TpaModule
 import dev.lizainslie.cafemc.tpa.commands.TpAcceptCommand
 import dev.lizainslie.cafemc.tpa.commands.TpDenyCommand
 import dev.lizainslie.cafemc.tpa.commands.TpaCommand
@@ -16,6 +18,10 @@ import org.jetbrains.exposed.sql.Database
 class CafeMC : JavaPlugin() {
     private val commandMap = CommandMap()
     private val config = getConfig()
+    private val modules = listOf(
+        TpaModule,
+        AfkModule,
+    )
 
     override fun onEnable() {
         instance = this
@@ -32,12 +38,11 @@ class CafeMC : JavaPlugin() {
 
         Bukkit.getPluginManager().registerEvents(ChatHandler, this)
         Bukkit.getPluginManager().registerEvents(SlimeListener, this)
-
-        commandMap += TpaCommand
-        commandMap += TpAcceptCommand
-        commandMap += TpDenyCommand
-
-        commandMap += AfkCommand
+        
+        modules.forEach { 
+            it.register(this)
+            commandMap += it.commands
+        }
 
         commandMap += RenameCommand
         

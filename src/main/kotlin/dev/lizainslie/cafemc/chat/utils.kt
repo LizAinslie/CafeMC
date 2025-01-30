@@ -4,14 +4,19 @@ import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
-fun broadcast(message: BaseComponent, filterPlayers: (player: Player) -> Boolean = { true }) {
-    Bukkit.getServer().onlinePlayers.filter(filterPlayers).forEach {
+fun broadcast(message: BaseComponent, filter: (player: Player) -> Boolean = { true }) {
+    Bukkit.getServer().onlinePlayers.filter(filter).forEach {
         it.spigot().sendMessage(message)
     }
 }
 
-fun broadcast(message: String, filterPlayers: (player: Player) -> Boolean = { true }) {
-    Bukkit.getServer().onlinePlayers.filter(filterPlayers).forEach {
+/**
+ * Broadcast a [message] to all online players excluding those that do not pass the [filter].
+ */
+fun broadcast(message: String, filter: (player: Player) -> Boolean = { true }) {
+    // todo: hook DiscordSRV
+    
+    Bukkit.getServer().onlinePlayers.filter(filter).forEach {
         it.sendMessage(message)
     }
 }

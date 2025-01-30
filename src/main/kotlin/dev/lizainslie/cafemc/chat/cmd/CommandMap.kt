@@ -1,4 +1,4 @@
-package dev.lizainslie.cafemc.chat
+package dev.lizainslie.cafemc.chat.cmd
 
 import org.bukkit.ChatColor
 import org.bukkit.Bukkit
@@ -13,6 +13,10 @@ class CommandMap : CommandExecutor, TabCompleter {
 
     operator fun plusAssign(command: PluginCommand) {
         commands[command.command] = command
+    }
+    
+    operator fun plusAssign(commands: List<PluginCommand>) {
+        commands.forEach { this += it }
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {

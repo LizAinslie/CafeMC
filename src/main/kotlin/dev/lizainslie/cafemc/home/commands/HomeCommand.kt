@@ -1,7 +1,7 @@
 package dev.lizainslie.cafemc.home.commands
 
-import dev.lizainslie.cafemc.chat.AllowedSender
-import dev.lizainslie.cafemc.chat.PluginCommand
+import dev.lizainslie.cafemc.chat.cmd.AllowedSender
+import dev.lizainslie.cafemc.chat.cmd.PluginCommand
 import dev.lizainslie.cafemc.data.location.SavedLocation
 import dev.lizainslie.cafemc.data.player.PlayerSettings
 import org.bukkit.ChatColor
