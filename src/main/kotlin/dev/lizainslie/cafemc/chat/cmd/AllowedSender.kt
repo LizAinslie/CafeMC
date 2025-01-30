@@ -1,9 +1,12 @@
-package dev.lizainslie.cafemc.chat
+package dev.lizainslie.cafemc.chat.cmd
 
 import org.bukkit.command.CommandSender
 import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.entity.Player
 
+/**
+ * Enum class to determine who can run a command
+ */
 enum class AllowedSender(
     val errorMessage: String
 ) {
@@ -12,6 +15,9 @@ enum class AllowedSender(
     ALL("")
     ;
 
+    /**
+     * Check if the [sender] is allowed to run the command
+     */
     fun check(sender: CommandSender): Boolean {
         return when (this) {
             PLAYER -> sender is Player

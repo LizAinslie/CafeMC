@@ -1,8 +1,8 @@
-package dev.lizainslie.cafemc.chat.commands
+package dev.lizainslie.cafemc.commands
 
 import dev.lizainslie.cafemc.ItemUtils
-import dev.lizainslie.cafemc.chat.AllowedSender
-import dev.lizainslie.cafemc.chat.PluginCommand
+import dev.lizainslie.cafemc.chat.cmd.AllowedSender
+import dev.lizainslie.cafemc.chat.cmd.PluginCommand
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 
