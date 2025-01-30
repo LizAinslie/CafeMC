@@ -1,10 +1,13 @@
 plugins {
     kotlin("jvm") version "2.1.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("dev.lizainslie.mcdevserver") version "0.1.0"
 }
 
 group = "dev.lizainslie"
 version = "0.1.0"
+
+val minecraftVersion = "1.21.4"
 
 repositories {
     mavenCentral()
@@ -54,4 +57,9 @@ tasks.processResources {
     filesMatching("plugin.yml") {
         expand(props)
     }
+}
+
+mcDevServer {
+    minecraftVersion = "1.21.4"
+    serverDirectory = "${project.rootDir}/devServer"
 }
