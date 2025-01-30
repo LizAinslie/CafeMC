@@ -35,8 +35,10 @@ object TpaMap {
         Bukkit.getScheduler().runTaskAsynchronously(CafeMC.instance) { _ ->
             Thread.sleep(120000) // 2 minutes
 
-            removeRequest(sender, target)
-            sender.sendMessage("${ChatColor.GRAY}Teleport request to ${ChatColor.GOLD}${target.displayName}${ChatColor.GRAY} has expired.")
+            if (getRequest(sender, target) != null) {
+                removeRequest(sender, target)
+                sender.sendMessage("${ChatColor.GRAY}Teleport request to ${ChatColor.GOLD}${target.displayName}${ChatColor.GRAY} has expired.")
+            }
         }
     }
 
