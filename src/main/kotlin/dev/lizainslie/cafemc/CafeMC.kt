@@ -5,6 +5,7 @@ import dev.lizainslie.cafemc.chat.ChatHandler
 import dev.lizainslie.cafemc.chat.CommandMap
 import dev.lizainslie.cafemc.chat.commands.RenameCommand
 import dev.lizainslie.cafemc.home.commands.HomeCommand
+import dev.lizainslie.cafemc.slime.SlimeListener
 import dev.lizainslie.cafemc.tpa.commands.TpAcceptCommand
 import dev.lizainslie.cafemc.tpa.commands.TpDenyCommand
 import dev.lizainslie.cafemc.tpa.commands.TpaCommand
@@ -30,6 +31,7 @@ class CafeMC : JavaPlugin() {
         Database.connect(config.getString("db")!!, driver = "org.sqlite.JDBC")
 
         Bukkit.getPluginManager().registerEvents(ChatHandler, this)
+        Bukkit.getPluginManager().registerEvents(SlimeListener, this)
 
         commandMap += TpaCommand
         commandMap += TpAcceptCommand
