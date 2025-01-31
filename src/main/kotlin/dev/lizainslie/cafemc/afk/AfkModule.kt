@@ -91,7 +91,7 @@ object AfkModule : PluginModule(), Listener {
     
     // region Tasks
     
-    private fun checkIdleTask(task: BukkitTask) {
+    private fun checkIdleTask() {
         // Iterate over all online players who are not AFK
         for (player in Bukkit.getOnlinePlayers().filter { !isAfk(it) }) {
             // If player is not in the idle map, add them with a base count of 1
