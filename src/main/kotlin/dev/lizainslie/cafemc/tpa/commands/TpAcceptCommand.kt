@@ -15,6 +15,7 @@ object TpAcceptCommand : PluginCommand(
     allowedSender = AllowedSender.PLAYER,
     minArgs = 0,
     maxArgs = 1,
+    permission = "cafe.tpa",
 ) {
     override fun onCommand(args: List<String>) {
         val player = sender as Player

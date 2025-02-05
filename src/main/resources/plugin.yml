@@ -3,25 +3,41 @@ version: '0.1.0'
 main: dev.lizainslie.cafemc.CafeMC
 api-version: '1.21'
 
+permissions: 
+  cafe.tpa:
+    description: Teleport to a player & accept/deny requests
+  cafe.afk:
+    description: Toggle AFK status
+  cafe.rename:
+    description: Rename the item in your hand
+  cafe.home:
+    description: Teleport to & set your home
+
 commands:
   tpa:
     description: Teleport to a player
     usage: /<command> <player>
+    permission: cafe.tpa
   tpaccept:
     description: Accept a teleport request
     usage: /<command>
+    permission: cafe.tpa
   tpdeny:
     description: Deny a teleport request
     usage: /<command>
+    permission: cafe.tpa
   afk:
     description: Toggle AFK status
     usage: /<command>
+    permission: cafe.afk
   rename:
     description: Rename the item in your hand
     usage: /<command> <name>
+    permission: cafe.rename
   home:
     description: Teleport to & set your home
     usage: /<command> [set|clear]
+    permission: cafe.home
 #  warp:
 #    description: Teleport to a warp
 #    usage: /<command> <warp>

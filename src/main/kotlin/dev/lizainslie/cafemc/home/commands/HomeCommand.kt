@@ -15,9 +15,10 @@ object HomeCommand : PluginCommand(
     command = "home",
     description = "Teleport to your home",
     usage = "/home [${SUBCOMMANDS.joinToString("|")}]",
+    allowedSender = AllowedSender.PLAYER,
     minArgs = 0,
     maxArgs = 1,
-    allowedSender = AllowedSender.PLAYER,
+    permission = "cafe.home",
 ) {
     override fun onCommand(args: List<String>) {
         val player = sender as Player

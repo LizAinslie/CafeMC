@@ -12,7 +12,8 @@ object RenameCommand : PluginCommand(
     usage = "/rename <name>",
     allowedSender = AllowedSender.PLAYER,
     minArgs = 1,
-    maxArgs = -1
+    maxArgs = -1,
+    permission = "cafe.rename",
 ) {
     override fun onCommand(args: List<String>) {
         val player = sender as Player
