@@ -2,6 +2,7 @@ package dev.lizainslie.cafemc.commands
 
 import dev.lizainslie.cafemc.ItemUtils
 import dev.lizainslie.cafemc.chat.cmd.AllowedSender
+import dev.lizainslie.cafemc.chat.cmd.CommandContext
 import dev.lizainslie.cafemc.chat.cmd.PluginCommand
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
@@ -15,7 +16,7 @@ object RenameCommand : PluginCommand(
     maxArgs = -1,
     permission = "cafe.rename",
 ) {
-    override fun onCommand(args: List<String>) {
+    override fun CommandContext.onCommand() {
         val player = sender as Player
         val item = player.inventory.itemInMainHand
         val meta = item.itemMeta ?: return

@@ -1,6 +1,7 @@
 package dev.lizainslie.cafemc.home.commands
 
 import dev.lizainslie.cafemc.chat.cmd.AllowedSender
+import dev.lizainslie.cafemc.chat.cmd.CommandContext
 import dev.lizainslie.cafemc.chat.cmd.PluginCommand
 import dev.lizainslie.cafemc.data.location.SavedLocation
 import dev.lizainslie.cafemc.data.player.PlayerSettings
@@ -20,9 +21,7 @@ object HomeCommand : PluginCommand(
     maxArgs = 1,
     permission = "cafe.home",
 ) {
-    override fun onCommand(args: List<String>) {
-        val player = sender as Player
-
+    override fun CommandContext.onCommand() {
         transaction {
             val settings = PlayerSettings.findOrCreate(player)
 
@@ -66,7 +65,7 @@ object HomeCommand : PluginCommand(
         }
     }
 
-    override fun tabComplete(sender: CommandSender, args: List<String>) = 
+    override fun CommandContext.tabComplete() = 
         when (args.size) {
             0 -> SUBCOMMANDS
             1 -> SUBCOMMANDS.filter { it.startsWith(args[0], ignoreCase = true) }

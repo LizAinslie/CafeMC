@@ -2,6 +2,9 @@ package dev.lizainslie.cafemc.tpa
 
 import dev.lizainslie.cafemc.CafeMC
 import dev.lizainslie.cafemc.core.PluginModule
+import dev.lizainslie.cafemc.data.location.SavedLocation
+import dev.lizainslie.cafemc.data.player.PlayerSettings
+import dev.lizainslie.cafemc.tpa.commands.BackCommand
 import dev.lizainslie.cafemc.tpa.commands.TpAcceptCommand
 import dev.lizainslie.cafemc.tpa.commands.TpDenyCommand
 import dev.lizainslie.cafemc.tpa.commands.TpaCommand
@@ -11,8 +14,12 @@ import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerTeleportEvent
+import org.jetbrains.exposed.sql.transactions.transaction
 
-object TpaModule : PluginModule() {
+object TpaModule : PluginModule(), Listener {
     private val requests = mutableListOf<TpaRequest>()
     
     private const val REQUEST_TIMEOUT = 120000L // 2 minutes
@@ -22,8 +29,30 @@ object TpaModule : PluginModule() {
         commands += TpaCommand
         commands += TpAcceptCommand
         commands += TpDenyCommand
+        commands += BackCommand
     }
+    
+    // region Event Handlers
+    
+    @EventHandler
+    fun onPlayerTeleport(event: PlayerTeleportEvent) {
+        if (event.player.hasPermission("cafe.tpa.back")) {
+            val player = event.player
+            val location = event.from
+            
+            transaction { 
+                val settings = PlayerSettings.findOrCreate(player)
+                settings.lastLocation = SavedLocation.createFromBukkit(location)
+                
+                player.sendMessage("${ChatColor.GRAY}Last location saved. Use ${ChatColor.GOLD}/back${ChatColor.GRAY} to return.")
+            }
+        }
+    }
+    
+    // endregion
 
+    
+    
     // region Public API
     
     /**

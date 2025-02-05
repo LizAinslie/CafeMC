@@ -2,6 +2,7 @@ package dev.lizainslie.cafemc.chat.cmd
 
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 
 abstract class PluginCommand(
     val command: String,
@@ -13,18 +14,51 @@ abstract class PluginCommand(
     val maxArgs: Int = 0,
     val allowedSender: AllowedSender = AllowedSender.ALL,
 ) {
-    protected lateinit var sender: CommandSender
-
     fun handle(s: CommandSender, args: List<String>) {
-        sender = s
-
-        onCommand(args)
+        val ctx = CommandContext(s, args, this)
+        ctx.onCommand()
+    }
+    
+    fun complete(s: CommandSender,  args: List<String>): List<String> {
+        val ctx = CommandContext(s, args, this)
+        return ctx.tabComplete()
     }
 
-    abstract fun onCommand(args: List<String>)
-    open fun tabComplete(sender: CommandSender, args: List<String>): List<String> = emptyList()
+    abstract fun CommandContext.onCommand()
+    open fun CommandContext.tabComplete(): List<String> = emptyList()
+}
+
+data class CommandContext(
+    val sender: CommandSender,
+    val args: List<String>,
+    val command: PluginCommand,
+) {
+    val player by lazy { sender as Player }
 
     fun sendError(message: String) {
         sender.sendMessage("${ChatColor.RED}${ChatColor.BOLD}Error:${ChatColor.RESET}${ChatColor.GRAY} $message")
     }
 }
+
+//fun createCommand(
+//    command: String,
+//    description: String,
+//    usage: String,
+//    permission: String? = null,
+//    aliases: List<String> = emptyList(),
+//    minArgs: Int = 0,
+//    maxArgs: Int = 0,
+//    allowedSender: AllowedSender = AllowedSender.ALL,
+//    block: CommandContext.() -> Unit,
+//): PluginCommand = object : PluginCommand(
+//    command = command,
+//    description = description,
+//    usage = usage,
+//    permission = permission,
+//    aliases = aliases,
+//    minArgs = minArgs,
+//    maxArgs = maxArgs,
+//    allowedSender = allowedSender,
+//) {
+//    override fun CommandContext.onCommand() = block()
+//}

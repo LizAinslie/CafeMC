@@ -1,11 +1,10 @@
 package dev.lizainslie.cafemc.tpa.commands
 
 import dev.lizainslie.cafemc.chat.cmd.AllowedSender
+import dev.lizainslie.cafemc.chat.cmd.CommandContext
 import dev.lizainslie.cafemc.chat.cmd.PluginCommand
 import dev.lizainslie.cafemc.tpa.TpaModule
 import org.bukkit.Bukkit
-import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 
 object TpaCommand : PluginCommand(
     command = "tpa",
@@ -16,9 +15,7 @@ object TpaCommand : PluginCommand(
     maxArgs = 1,
     permission = "cafe.tpa",
 ) {
-    override fun onCommand(args: List<String>) {
-        val player = sender as Player
-
+    override fun CommandContext.onCommand() {
         val target = Bukkit.getPlayer(args[0])
         if (target == null) {
             sendError("Player not found")
@@ -28,7 +25,7 @@ object TpaCommand : PluginCommand(
         TpaModule.addRequest(player, target)
     }
 
-    override fun tabComplete(sender: CommandSender, args: List<String>) = when (args.size) {
+    override fun CommandContext.tabComplete() = when (args.size) {
         0 -> Bukkit.getOnlinePlayers().map { it.name }
         1 -> Bukkit.getOnlinePlayers().map { it.name }.filter { it.startsWith(args[0], ignoreCase = true) }
         else -> emptyList()

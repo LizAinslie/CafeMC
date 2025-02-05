@@ -1,8 +1,8 @@
 package dev.lizainslie.cafemc.afk.commands
 
 import dev.lizainslie.cafemc.afk.AfkModule
+import dev.lizainslie.cafemc.chat.cmd.CommandContext
 import dev.lizainslie.cafemc.chat.cmd.PluginCommand
-import org.bukkit.entity.Player
 
 object AfkCommand : PluginCommand(
     command = "afk",
@@ -10,9 +10,7 @@ object AfkCommand : PluginCommand(
     usage = "/afk",
     permission = "cafe.afk",
 ) {
-    override fun onCommand(args: List<String>) {
-        val player = sender as Player
-
+    override fun CommandContext.onCommand() {
         AfkModule.toggleAfk(player)
     }
 }

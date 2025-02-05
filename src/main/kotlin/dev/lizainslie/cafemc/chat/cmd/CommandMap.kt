@@ -61,7 +61,7 @@ class CommandMap : CommandExecutor, TabCompleter {
     ): List<String>? {
         val pluginCommand = commands[command.name] ?: return null
 
-        return pluginCommand.tabComplete(sender, args?.asList() ?: emptyList())
+        return pluginCommand.complete(sender, args?.asList() ?: emptyList())
     }
 
     fun register() {
