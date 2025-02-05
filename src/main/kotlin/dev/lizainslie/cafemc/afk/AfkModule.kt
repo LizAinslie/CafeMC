@@ -11,6 +11,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerMoveEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scheduler.BukkitTask
 
 object AfkModule : PluginModule(), Listener {
@@ -32,6 +33,15 @@ object AfkModule : PluginModule(), Listener {
         idleMap[event.player] = 0
     }
     
+    @EventHandler
+    fun onPlayerQuit(event: PlayerQuitEvent) {
+        // Remove player from idle map
+        idleMap.remove(event.player)
+        
+        // If player is AFK, remove AFK status silently
+        if (isAfk(event.player)) toggleAfk(event.player, notify = false, announce = false)
+    }
+    
     // endregion
     
     
@@ -41,26 +51,17 @@ object AfkModule : PluginModule(), Listener {
     /**
      * Toggle AFK status for [player]
      */
-    fun toggleAfk(player: Player) {
+    fun toggleAfk(player: Player, notify: Boolean = true, announce: Boolean = true) {
         val newAfkStatus = !isAfk(player)
 
         afkMap[player] = newAfkStatus
 
-        // Ignore player for sleep checks
-        player.isSleepingIgnored = newAfkStatus
-
-        // Update Tab List
-        val tab = TabAPI.getInstance()
-        val tabPlayer = tab.getPlayer(player.uniqueId) ?: return
-        (tab.tabListFormatManager ?: return).setPrefix(tabPlayer, if (newAfkStatus) "${ChatColor.GRAY}[AFK]${ChatColor.RESET} " else null)
-
-        // Send message
-        player.sendMessage("${ChatColor.GRAY}You are ${if (newAfkStatus) "now" else "no longer"} AFK.")
-
-        // Broadcast message
-        broadcast("${ChatColor.GOLD}${player.displayName}${ChatColor.GRAY} is ${if (newAfkStatus) "now" else "no longer"} AFK.") {
-            it != player // Don't send to the player who toggled AFK
-        }
+        // Ignore player for sleep checks & update tab list
+        updateSleepRequirement(player, newAfkStatus)
+        updateTabList(player, newAfkStatus)
+        
+        if (notify) notifyAfk(player, newAfkStatus)
+        if (announce) announceAfk(player, newAfkStatus)
     }
 
     /**
@@ -68,6 +69,42 @@ object AfkModule : PluginModule(), Listener {
      */
     fun isAfk(player: Player): Boolean {
         return afkMap[player] ?: false
+    }
+    
+    // endregion
+    
+    
+    
+    // region Private API
+    
+    /**
+     * Notify [player] of their [newAfkStatus]
+     */
+    private fun notifyAfk(player: Player, newAfkStatus: Boolean) {
+        player.sendMessage("${ChatColor.GRAY}You are ${if (newAfkStatus) "now" else "no longer"} AFK.")
+    }
+    
+    /**
+     * Broadcast a message to all players of the [newAfkStatus] of [player] 
+     */
+    private fun announceAfk(player: Player, newAfkStatus: Boolean, playerFilter: (Player) -> Boolean = { it != player }) =
+        broadcast("${ChatColor.GOLD}${player.displayName}${ChatColor.GRAY} is ${if (newAfkStatus) "now" else "no longer"} AFK.", playerFilter)
+    
+    /**
+     * Update the tab list for [player] based on their [newAfkStatus]
+     */
+    private fun updateTabList(player: Player, newAfkStatus: Boolean) {
+        // Update Tab List
+        val tab = TabAPI.getInstance()
+        val tabPlayer = tab.getPlayer(player.uniqueId) ?: return
+        (tab.tabListFormatManager ?: return).setPrefix(tabPlayer, if (newAfkStatus) "${ChatColor.GRAY}[AFK]${ChatColor.RESET} " else null)
+    }
+    
+    /**
+     * Update the sleep requirement for [player] based on their [newAfkStatus]
+     */
+    private fun updateSleepRequirement(player: Player, newAfkStatus: Boolean) {
+        player.isSleepingIgnored = newAfkStatus
     }
     
     // endregion
@@ -84,6 +121,19 @@ object AfkModule : PluginModule(), Listener {
         
         // Register idle task
         Bukkit.getServer().scheduler.runTaskTimer(cafeMC, ::checkIdleTask, 20, 20)
+    }
+
+    override fun onDisable(cafeMC: CafeMC) {
+        super.onDisable(cafeMC)
+        
+        // Clear all AFK statuses
+        
+        afkMap.keys.forEach {
+            updateSleepRequirement(it, false)
+            updateTabList(it, false)
+        }
+        
+        afkMap.clear()
     }
     
     // endregion

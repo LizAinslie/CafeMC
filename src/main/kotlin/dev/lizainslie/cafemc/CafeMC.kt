@@ -45,10 +45,12 @@ class CafeMC : JavaPlugin() {
         commandMap += HomeCommand
 
         commandMap.register()
+        
+        modules.forEach { it.onEnable(this) }
     }
 
     override fun onDisable() {
-        // Plugin shutdown logic
+        modules.forEach { it.onDisable(this) }
     }
 
     companion object {
