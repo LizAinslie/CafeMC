@@ -116,9 +116,6 @@ object AfkModule : PluginModule(), Listener {
     override fun register(cafeMC: CafeMC) {
         super.register(cafeMC)
         
-        // Register listeners
-        Bukkit.getPluginManager().registerEvents(this, cafeMC)
-        
         // Register idle task
         Bukkit.getServer().scheduler.runTaskTimer(cafeMC, ::checkIdleTask, 20, 20)
     }
