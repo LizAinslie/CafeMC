@@ -4,8 +4,10 @@ main: dev.lizainslie.cafemc.CafeMC
 api-version: '1.21'
 
 permissions: 
-  cafe.tpa:
+  cafe.tpa.use:
     description: Teleport to a player & accept/deny requests
+  cafe.tpa.back:
+    description: Teleport back to your previous location
   cafe.afk:
     description: Toggle AFK status
   cafe.rename:
@@ -17,15 +19,19 @@ commands:
   tpa:
     description: Teleport to a player
     usage: /<command> <player>
-    permission: cafe.tpa
+    permission: cafe.tpa.use
   tpaccept:
     description: Accept a teleport request
     usage: /<command>
-    permission: cafe.tpa
+    permission: cafe.tpa.use
   tpdeny:
     description: Deny a teleport request
     usage: /<command>
-    permission: cafe.tpa
+    permission: cafe.tpa.use
+  back:
+    description: Teleport back to your previous location
+    usage: /<command>
+    permission: cafe.tpa.back
   afk:
     description: Toggle AFK status
     usage: /<command>

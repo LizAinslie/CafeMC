@@ -13,7 +13,7 @@ object TpaCommand : PluginCommand(
     allowedSender = AllowedSender.PLAYER,
     minArgs = 1,
     maxArgs = 1,
-    permission = "cafe.tpa",
+    permission = "cafe.tpa.use",
 ) {
     override fun CommandContext.onCommand() {
         val target = Bukkit.getPlayer(args[0])

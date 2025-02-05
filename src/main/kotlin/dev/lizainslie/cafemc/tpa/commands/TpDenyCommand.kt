@@ -15,7 +15,7 @@ object TpDenyCommand : PluginCommand(
     allowedSender = AllowedSender.PLAYER,
     minArgs = 0,
     maxArgs = 1,
-    permission = "cafe.tpa",
+    permission = "cafe.tpa.use",
 ) {
     override fun CommandContext.onCommand() {
         withTpaRequest { request ->

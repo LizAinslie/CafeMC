@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.lizainslie"
-version = "0.1.0"
+version = "0.1.1"
 
 val minecraftVersion = "1.21.4"
 

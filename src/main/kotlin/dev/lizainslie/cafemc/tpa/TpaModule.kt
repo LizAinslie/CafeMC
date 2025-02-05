@@ -40,11 +40,24 @@ object TpaModule : PluginModule(), Listener {
             val player = event.player
             val location = event.from
             
+            // Check if player is teleporting back already and ignore
+            if (player.hasMetadata("teleporting_back")) {
+                player.removeMetadata("teleporting_back", CafeMC.instance)
+                return
+            }
+            
+            // Save last location
             transaction { 
                 val settings = PlayerSettings.findOrCreate(player)
                 settings.lastLocation = SavedLocation.createFromBukkit(location)
                 
-                player.sendMessage("${ChatColor.GRAY}Last location saved. Use ${ChatColor.GOLD}/back${ChatColor.GRAY} to return.")
+                player.spigot().sendMessage(
+                    ComponentBuilder("Last location saved. ").color(ChatColor.GRAY)
+                        .append("[Go Back]").color(ChatColor.GOLD)
+                            .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/back"))
+                            .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("/back").create()))
+                        .build()
+                )
             }
         }
     }

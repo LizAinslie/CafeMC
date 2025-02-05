@@ -16,8 +16,10 @@ class PlayerSettings(id: EntityID<UUID>): UUIDEntity(id) {
     }
 
     var home by SavedLocation optionalReferencedOn PlayerSettingsTable.home
+    var lastLocation by SavedLocation optionalReferencedOn PlayerSettingsTable.lastLocation
 }
 
 object PlayerSettingsTable : UUIDTable("player_settings") {
     val home = reference("home", SavedLocationTable).nullable()
+    val lastLocation = reference("last_location", SavedLocationTable).nullable()
 }
