@@ -19,6 +19,11 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.jetbrains.exposed.sql.transactions.transaction
 
+internal val BACK_LOG_TELEPORT_CAUSES = setOf(
+    PlayerTeleportEvent.TeleportCause.COMMAND,
+    PlayerTeleportEvent.TeleportCause.PLUGIN,
+)
+
 object TpaModule : PluginModule(), Listener {
     private val requests = mutableListOf<TpaRequest>()
     
@@ -36,7 +41,7 @@ object TpaModule : PluginModule(), Listener {
     
     @EventHandler
     fun onPlayerTeleport(event: PlayerTeleportEvent) {
-        if (event.player.hasPermission("cafe.tpa.back")) {
+        if (event.player.hasPermission("cafe.tpa.back") && event.cause in BACK_LOG_TELEPORT_CAUSES) {
             val player = event.player
             val location = event.from
             
