@@ -11,8 +11,10 @@ import org.bukkit.entity.Player
 object TpDenyCommand : PluginCommand(
     command = "tpdeny",
     description = "Deny a teleport request",
-    usage = "/tpdeny",
-    allowedSender = AllowedSender.PLAYER
+    usage = "/tpdeny [player]",
+    allowedSender = AllowedSender.PLAYER,
+    minArgs = 0,
+    maxArgs = 1,
 ) {
     override fun onCommand(args: List<String>) {
         val player = sender as Player
