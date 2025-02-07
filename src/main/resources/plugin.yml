@@ -3,6 +3,10 @@ version: '0.1.0'
 main: dev.lizainslie.cafemc.CafeMC
 api-version: '1.21'
 
+depend:
+  - DiscordSRV
+  - TAB
+
 permissions: 
   cafe.tpa.use:
     description: Teleport to a player & accept/deny requests

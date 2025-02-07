@@ -39,26 +39,3 @@ data class CommandContext(
         sender.sendMessage("${ChatColor.RED}${ChatColor.BOLD}Error:${ChatColor.RESET}${ChatColor.GRAY} $message")
     }
 }
-
-//fun createCommand(
-//    command: String,
-//    description: String,
-//    usage: String,
-//    permission: String? = null,
-//    aliases: List<String> = emptyList(),
-//    minArgs: Int = 0,
-//    maxArgs: Int = 0,
-//    allowedSender: AllowedSender = AllowedSender.ALL,
-//    block: CommandContext.() -> Unit,
-//): PluginCommand = object : PluginCommand(
-//    command = command,
-//    description = description,
-//    usage = usage,
-//    permission = permission,
-//    aliases = aliases,
-//    minArgs = minArgs,
-//    maxArgs = maxArgs,
-//    allowedSender = allowedSender,
-//) {
-//    override fun CommandContext.onCommand() = block()
-//}

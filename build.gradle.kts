@@ -14,9 +14,11 @@ repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") {
         name = "spigotmc-repo"
     }
+    
     maven("https://oss.sonatype.org/content/groups/public/") {
         name = "sonatype"
     }
+    
     maven("https://mvn.devos.one/releases") {
         name = "devOS"
     }
@@ -28,17 +30,21 @@ repositories {
 val exposedVersion: String by project
 
 dependencies {
+    // platform
     compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
+    // orm
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-crypt:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-
+    
+    // db
     implementation("org.xerial:sqlite-jdbc:3.44.1.0")
 
-    compileOnly("com.github.NEZNAMY", "TAB-API", "5.0.4")
+    // integration
+    compileOnly("com.github.NEZNAMY:TAB-API:5.0.4")
 }
 
 val targetJavaVersion = 21
