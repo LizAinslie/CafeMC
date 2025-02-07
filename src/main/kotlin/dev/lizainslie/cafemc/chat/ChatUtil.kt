@@ -3,7 +3,6 @@ package dev.lizainslie.cafemc.chat
 import dev.lizainslie.cafemc.util.DiscordUtils
 import dev.lizainslie.cafemc.util.EmbedBuilderDsl
 import github.scarsz.discordsrv.DiscordSRV
-import github.scarsz.discordsrv.dependencies.jda.api.entities.Message
 import github.scarsz.discordsrv.dependencies.jda.api.entities.MessageEmbed
 import github.scarsz.discordsrv.util.DiscordUtil
 import net.md_5.bungee.api.chat.BaseComponent
@@ -18,7 +17,7 @@ object ChatUtil {
      * @param sendToDiscord Optionally send the message to Discord as well.
      */
     fun broadcast(message: BaseComponent, sendToDiscord: Boolean = true, filter: (player: Player) -> Boolean = { true }) {
-        broadcastTextToDiscord(message.toPlainText())
+        if(sendToDiscord) broadcastTextToDiscord(message.toPlainText())
         
         Bukkit.getServer().onlinePlayers.filter(filter).forEach {
             it.spigot().sendMessage(message)
@@ -42,14 +41,11 @@ object ChatUtil {
     fun broadcast(message: BaseComponent, filter: (player: Player) -> Boolean) = broadcast(message, true, filter)
     
     fun broadcastTextToDiscord(message: String) {
-        DiscordUtil.sendMessage(
-            DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().mainChatChannel),
-            message
-        )
+        DiscordUtil.sendMessage(DiscordSRV.getPlugin().mainTextChannel, message)
     }
     
     fun broadcastEmbedToDiscord(embed: MessageEmbed) {
-        DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().mainChatChannel).sendMessageEmbeds(embed).queue()
+        DiscordSRV.getPlugin().mainTextChannel.sendMessageEmbeds(embed).queue()
     }
     
     fun broadcastEmbedToDiscord(builder: EmbedBuilderDsl.() -> Unit) {
