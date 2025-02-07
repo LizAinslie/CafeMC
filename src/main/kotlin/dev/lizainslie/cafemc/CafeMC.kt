@@ -1,5 +1,7 @@
 package dev.lizainslie.cafemc
 
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import dev.lizainslie.cafemc.afk.AfkModule
 import dev.lizainslie.cafemc.chat.ChatHandler
 import dev.lizainslie.cafemc.chat.cmd.CommandMap
@@ -19,6 +21,10 @@ class CafeMC : JavaPlugin() {
         AfkModule,
         SlimeFinderModule,
     )
+    
+    private lateinit var hikariConfig: HikariConfig
+    
+    val hikariDataSource by lazy { HikariDataSource(hikariConfig) }
 
     override fun onEnable() {
         instance = this
@@ -30,8 +36,13 @@ class CafeMC : JavaPlugin() {
             server.pluginManager.disablePlugin(this)
             return
         }
+        
+        hikariConfig = HikariConfig().apply {
+            jdbcUrl = config.getString("db")!!
+            driverClassName = "org.sqlite.JDBC"
+        }
 
-        Database.connect(config.getString("db")!!, driver = "org.sqlite.JDBC")
+        Database.connect(hikariDataSource)
 
         Bukkit.getPluginManager().registerEvents(ChatHandler, this)
         
