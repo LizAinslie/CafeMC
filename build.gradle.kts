@@ -42,6 +42,8 @@ dependencies {
     
     // db
     implementation("org.xerial:sqlite-jdbc:3.44.1.0")
+    implementation("com.zaxxer:HikariCP:6.2.1")
+    implementation("org.flywaydb:flyway-core:11.3.1")
 
     // integration
     compileOnly("com.github.NEZNAMY:TAB-API:5.0.4")
