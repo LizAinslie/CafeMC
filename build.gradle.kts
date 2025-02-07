@@ -22,6 +22,10 @@ repositories {
     maven("https://mvn.devos.one/releases") {
         name = "devOS"
     }
+    
+    maven("https://nexus.scarsz.me/content/groups/public/") {
+        name = "scarsz"
+    }
 
     maven("https://jitpack.io")
 
@@ -47,6 +51,8 @@ dependencies {
 
     // integration
     compileOnly("com.github.NEZNAMY:TAB-API:5.0.4")
+    compileOnly("com.discordsrv:discordsrv:1.28.0")
+    
 }
 
 val targetJavaVersion = 21

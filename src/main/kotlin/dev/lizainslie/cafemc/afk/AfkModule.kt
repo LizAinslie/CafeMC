@@ -2,8 +2,9 @@ package dev.lizainslie.cafemc.afk
 
 import dev.lizainslie.cafemc.CafeMC
 import dev.lizainslie.cafemc.afk.commands.AfkCommand
-import dev.lizainslie.cafemc.chat.broadcast
+import dev.lizainslie.cafemc.chat.ChatUtil
 import dev.lizainslie.cafemc.core.PluginModule
+import github.scarsz.discordsrv.dependencies.jda.api.EmbedBuilder
 import me.neznamy.tab.api.TabAPI
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -87,8 +88,19 @@ object AfkModule : PluginModule(), Listener {
     /**
      * Broadcast a message to all players of the [newAfkStatus] of [player] 
      */
-    private fun announceAfk(player: Player, newAfkStatus: Boolean, playerFilter: (Player) -> Boolean = { it != player }) =
-        broadcast("${ChatColor.GOLD}${player.displayName}${ChatColor.GRAY} is ${if (newAfkStatus) "now" else "no longer"} AFK.", playerFilter)
+    private fun announceAfk(player: Player, newAfkStatus: Boolean, playerFilter: (Player) -> Boolean = { it != player }) {
+        ChatUtil.broadcast(
+            "${ChatColor.GOLD}${player.displayName}${ChatColor.GRAY} is ${if (newAfkStatus) "now" else "no longer"} AFK.",
+            false,
+            playerFilter
+        )
+        
+        ChatUtil.broadcastEmbedToDiscord(EmbedBuilder().setAuthor(
+            "${player.displayName} is ${if (newAfkStatus) "now" else "no longer"} AFK.",
+            null,
+            "https://api.mineatar.io/face/${player.uniqueId}"
+        ).build())
+    }
     
     /**
      * Update the tab list for [player] based on their [newAfkStatus]
