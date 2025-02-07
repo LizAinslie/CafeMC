@@ -95,11 +95,12 @@ object AfkModule : PluginModule(), Listener {
             playerFilter
         )
         
-        ChatUtil.broadcastEmbedToDiscord(EmbedBuilder().setAuthor(
-            "${player.displayName} is ${if (newAfkStatus) "now" else "no longer"} AFK.",
-            null,
-            "https://api.mineatar.io/face/${player.uniqueId}"
-        ).build())
+        ChatUtil.broadcastEmbedToDiscord {
+            author {
+                name = "${player.displayName} is ${if (newAfkStatus) "now" else "no longer"} AFK."
+                iconUrl = "https://api.mineatar.io/face/${player.uniqueId}"
+            }
+        }
     }
     
     /**

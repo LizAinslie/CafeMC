@@ -1,6 +1,6 @@
 package dev.lizainslie.cafemc.commands
 
-import dev.lizainslie.cafemc.ItemUtils
+import dev.lizainslie.cafemc.util.ItemUtils
 import dev.lizainslie.cafemc.chat.cmd.AllowedSender
 import dev.lizainslie.cafemc.chat.cmd.CommandContext
 import dev.lizainslie.cafemc.chat.cmd.PluginCommand

@@ -1,5 +1,7 @@
 package dev.lizainslie.cafemc.chat
 
+import dev.lizainslie.cafemc.util.DiscordUtils
+import dev.lizainslie.cafemc.util.EmbedBuilderDsl
 import github.scarsz.discordsrv.DiscordSRV
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Message
 import github.scarsz.discordsrv.dependencies.jda.api.entities.MessageEmbed
@@ -48,5 +50,9 @@ object ChatUtil {
     
     fun broadcastEmbedToDiscord(embed: MessageEmbed) {
         DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().mainChatChannel).sendMessageEmbeds(embed).queue()
+    }
+    
+    fun broadcastEmbedToDiscord(builder: EmbedBuilderDsl.() -> Unit) {
+        broadcastEmbedToDiscord(DiscordUtils.buildEmbed(builder))
     }
 }

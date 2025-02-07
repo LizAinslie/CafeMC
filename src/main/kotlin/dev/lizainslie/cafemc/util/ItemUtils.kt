@@ -1,4 +1,4 @@
-package dev.lizainslie.cafemc
+package dev.lizainslie.cafemc.util
 
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack

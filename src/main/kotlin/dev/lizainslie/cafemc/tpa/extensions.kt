@@ -2,7 +2,6 @@ package dev.lizainslie.cafemc.tpa
 
 import dev.lizainslie.cafemc.chat.cmd.CommandContext
 import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 
 internal fun CommandContext.tabCompleteRequests(): List<String> {
     val openRequests = TpaModule.getRequestsTo(player)
