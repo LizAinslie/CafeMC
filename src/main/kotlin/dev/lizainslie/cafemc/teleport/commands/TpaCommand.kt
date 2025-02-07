@@ -1,9 +1,9 @@
-package dev.lizainslie.cafemc.tpa.commands
+package dev.lizainslie.cafemc.teleport.commands
 
 import dev.lizainslie.cafemc.chat.cmd.AllowedSender
 import dev.lizainslie.cafemc.chat.cmd.CommandContext
 import dev.lizainslie.cafemc.chat.cmd.PluginCommand
-import dev.lizainslie.cafemc.tpa.TpaModule
+import dev.lizainslie.cafemc.teleport.TeleportModule
 import org.bukkit.Bukkit
 
 object TpaCommand : PluginCommand(
@@ -22,7 +22,7 @@ object TpaCommand : PluginCommand(
             return
         }
 
-        TpaModule.addRequest(player, target)
+        TeleportModule.addRequest(player, target)
     }
 
     override fun CommandContext.tabComplete() = when (args.size) {

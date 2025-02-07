@@ -1,13 +1,8 @@
-package dev.lizainslie.cafemc.tpa
+package dev.lizainslie.cafemc.teleport
 
 import dev.lizainslie.cafemc.CafeMC
 import dev.lizainslie.cafemc.core.PluginModule
-import dev.lizainslie.cafemc.data.location.SavedLocation
-import dev.lizainslie.cafemc.data.player.PlayerSettings
-import dev.lizainslie.cafemc.tpa.commands.BackCommand
-import dev.lizainslie.cafemc.tpa.commands.TpAcceptCommand
-import dev.lizainslie.cafemc.tpa.commands.TpDenyCommand
-import dev.lizainslie.cafemc.tpa.commands.TpaCommand
+import dev.lizainslie.cafemc.teleport.commands.*
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
@@ -17,14 +12,8 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerTeleportEvent
-import org.jetbrains.exposed.sql.transactions.transaction
 
-internal val BACK_LOG_TELEPORT_CAUSES = setOf(
-    PlayerTeleportEvent.TeleportCause.COMMAND,
-    PlayerTeleportEvent.TeleportCause.PLUGIN,
-)
-
-object TpaModule : PluginModule(), Listener {
+object TeleportModule : PluginModule(), Listener {
     private val requests = mutableListOf<TpaRequest>()
     
     private const val REQUEST_TIMEOUT = 120000L // 2 minutes
@@ -34,6 +23,9 @@ object TpaModule : PluginModule(), Listener {
         commands += TpaCommand
         commands += TpAcceptCommand
         commands += TpDenyCommand
+        
+        commands += HomeCommand
+        
         commands += BackCommand
     }
     
@@ -41,7 +33,7 @@ object TpaModule : PluginModule(), Listener {
     
     @EventHandler
     fun onPlayerTeleport(event: PlayerTeleportEvent) {
-        if (event.player.hasPermission("cafe.tpa.back") && event.cause in BACK_LOG_TELEPORT_CAUSES) {
+        if (event.player.hasPermission("cafe.tpa.back") && event.cause == PlayerTeleportEvent.TeleportCause.COMMAND) {
             val player = event.player
             val location = event.from
             
@@ -52,18 +44,7 @@ object TpaModule : PluginModule(), Listener {
             }
             
             // Save last location
-            transaction { 
-                val settings = PlayerSettings.findOrCreate(player)
-                settings.lastLocation = SavedLocation.createFromBukkit(location)
-                
-                player.spigot().sendMessage(
-                    ComponentBuilder("Last location saved. ").color(ChatColor.GRAY)
-                        .append("[Go Back]").color(ChatColor.GOLD)
-                            .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/back"))
-                            .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("/back").create()))
-                        .build()
-                )
-            }
+            player.setLastLocation(location)
         }
     }
     

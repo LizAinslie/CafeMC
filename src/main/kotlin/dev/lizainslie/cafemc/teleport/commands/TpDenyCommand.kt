@@ -1,11 +1,11 @@
-package dev.lizainslie.cafemc.tpa.commands
+package dev.lizainslie.cafemc.teleport.commands
 
 import dev.lizainslie.cafemc.chat.cmd.AllowedSender
 import dev.lizainslie.cafemc.chat.cmd.CommandContext
 import dev.lizainslie.cafemc.chat.cmd.PluginCommand
-import dev.lizainslie.cafemc.tpa.TpaModule
-import dev.lizainslie.cafemc.tpa.tabCompleteRequests
-import dev.lizainslie.cafemc.tpa.withTpaRequest
+import dev.lizainslie.cafemc.teleport.TeleportModule
+import dev.lizainslie.cafemc.teleport.tabCompleteRequests
+import dev.lizainslie.cafemc.teleport.withTpaRequest
 import net.md_5.bungee.api.ChatColor
 
 object TpDenyCommand : PluginCommand(
@@ -19,7 +19,7 @@ object TpDenyCommand : PluginCommand(
 ) {
     override fun CommandContext.onCommand() {
         withTpaRequest { request ->
-            TpaModule.removeRequest(request.sender, player)
+            TeleportModule.removeRequest(request.sender, player)
 
             player.sendMessage("${ChatColor.GRAY}Denied teleport request from ${ChatColor.GOLD}${request.sender.displayName}${ChatColor.GRAY}.")
             request.sender.sendMessage("${ChatColor.GOLD}${player.displayName}${ChatColor.GRAY} has denied your teleport request.")

@@ -1,13 +1,12 @@
-package dev.lizainslie.cafemc.home.commands
+package dev.lizainslie.cafemc.teleport.commands
 
 import dev.lizainslie.cafemc.chat.cmd.AllowedSender
 import dev.lizainslie.cafemc.chat.cmd.CommandContext
 import dev.lizainslie.cafemc.chat.cmd.PluginCommand
 import dev.lizainslie.cafemc.data.location.SavedLocation
 import dev.lizainslie.cafemc.data.player.PlayerSettings
+import dev.lizainslie.cafemc.teleport.setLastLocation
 import org.bukkit.ChatColor
-import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 import org.jetbrains.exposed.sql.transactions.transaction
 
 internal val SUBCOMMANDS = listOf("set", "clear")
@@ -30,6 +29,10 @@ object HomeCommand : PluginCommand(
                 if (home == null) {
                     sendError("You do not have a home set.")
                     return@transaction
+                }
+                
+                if (player.hasPermission("cafe.tpa.back")) {
+                    player.setLastLocation(player.location)
                 }
 
                 player.teleport(home.getLocation())

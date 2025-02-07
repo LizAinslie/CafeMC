@@ -6,9 +6,10 @@ import dev.lizainslie.cafemc.afk.AfkModule
 import dev.lizainslie.cafemc.chat.ChatHandler
 import dev.lizainslie.cafemc.chat.cmd.CommandMap
 import dev.lizainslie.cafemc.commands.RenameCommand
-import dev.lizainslie.cafemc.home.commands.HomeCommand
+import dev.lizainslie.cafemc.data.commands.MigrateCommand
+import dev.lizainslie.cafemc.teleport.commands.HomeCommand
 import dev.lizainslie.cafemc.slime.SlimeFinderModule
-import dev.lizainslie.cafemc.tpa.TpaModule
+import dev.lizainslie.cafemc.teleport.TeleportModule
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.jetbrains.exposed.sql.Database
@@ -17,7 +18,7 @@ class CafeMC : JavaPlugin() {
     private val commandMap = CommandMap()
     private val config = getConfig()
     private val modules = listOf(
-        TpaModule,
+        TeleportModule,
         AfkModule,
         SlimeFinderModule,
     )
@@ -53,7 +54,7 @@ class CafeMC : JavaPlugin() {
 
         commandMap += RenameCommand
         
-        commandMap += HomeCommand
+        commandMap += MigrateCommand
 
         commandMap.register()
         

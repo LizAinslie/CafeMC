@@ -1,4 +1,4 @@
-package dev.lizainslie.cafemc.tpa.commands
+package dev.lizainslie.cafemc.teleport.commands
 
 import dev.lizainslie.cafemc.CafeMC
 import dev.lizainslie.cafemc.chat.cmd.AllowedSender
@@ -7,7 +7,6 @@ import dev.lizainslie.cafemc.chat.cmd.PluginCommand
 import dev.lizainslie.cafemc.data.player.PlayerSettings
 import org.bukkit.ChatColor
 import org.bukkit.metadata.FixedMetadataValue
-import org.bukkit.metadata.MetadataValue
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object BackCommand : PluginCommand(

@@ -1,4 +1,4 @@
-package dev.lizainslie.cafemc.tpa
+package dev.lizainslie.cafemc.teleport
 
 import org.bukkit.entity.Player
 
