@@ -1,7 +1,7 @@
 package dev.lizainslie.cafemc.data.player
 
 import dev.lizainslie.cafemc.data.location.SavedLocation
-import dev.lizainslie.cafemc.data.location.SavedLocationTable
+import dev.lizainslie.cafemc.data.location.SavedLocationsTable
 import org.bukkit.entity.Player
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
@@ -20,6 +20,6 @@ class PlayerSettings(id: EntityID<UUID>): UUIDEntity(id) {
 }
 
 object PlayerSettingsTable : UUIDTable("player_settings") {
-    val home = reference("home", SavedLocationTable).nullable()
-    val lastLocation = reference("last_location", SavedLocationTable).nullable()
+    val home = reference("home", SavedLocationsTable).nullable()
+    val lastLocation = reference("last_location", SavedLocationsTable).nullable()
 }

@@ -1,8 +1,8 @@
 package dev.lizainslie.cafemc.teleport.commands
 
-import dev.lizainslie.cafemc.chat.cmd.AllowedSender
-import dev.lizainslie.cafemc.chat.cmd.CommandContext
-import dev.lizainslie.cafemc.chat.cmd.PluginCommand
+import dev.lizainslie.cafemc.core.cmd.AllowedSender
+import dev.lizainslie.cafemc.core.cmd.CommandContext
+import dev.lizainslie.cafemc.core.cmd.PluginCommand
 import dev.lizainslie.cafemc.data.location.SavedLocation
 import dev.lizainslie.cafemc.data.player.PlayerSettings
 import dev.lizainslie.cafemc.teleport.setLastLocation

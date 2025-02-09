@@ -1,16 +1,16 @@
 package dev.lizainslie.cafemc.commands
 
 import dev.lizainslie.cafemc.util.ItemUtils
-import dev.lizainslie.cafemc.chat.cmd.AllowedSender
-import dev.lizainslie.cafemc.chat.cmd.CommandContext
-import dev.lizainslie.cafemc.chat.cmd.PluginCommand
+import dev.lizainslie.cafemc.core.cmd.AllowedSender
+import dev.lizainslie.cafemc.core.cmd.CommandContext
+import dev.lizainslie.cafemc.core.cmd.PluginCommand
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 
 object RenameCommand : PluginCommand(
     command = "rename",
     description = "Rename the item in your hand",
-    usage = "/rename <name>",
+    usage = "<name>",
     allowedSender = AllowedSender.PLAYER,
     minArgs = 1,
     maxArgs = -1,

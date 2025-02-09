@@ -6,6 +6,7 @@ api-version: '1.21'
 depend:
   - DiscordSRV
   - TAB
+  - Vault
 
 permissions: 
   cafe.tpa.use:
@@ -18,6 +19,14 @@ permissions:
     description: Rename the item in your hand
   cafe.home:
     description: Teleport to & set your home
+  cafe.balance:
+    description: Check your balance
+  cafe.balance.others:
+    description: Check the balance of another player
+  cafe.pay:
+    description: Pay another player
+  cafe.deposit:
+    description: Deposit your valuables as money into your account
 
 commands:
   tpa:
@@ -48,6 +57,23 @@ commands:
     description: Teleport to & set your home
     usage: /<command> [set|clear]
     permission: cafe.home
+  migrate:
+    description: Migrate database changes
+    usage: /<command>
+  balance:
+    description: Check your balance or the balance of another player
+    usage: /<command> [player]
+    permission: cafe.balance
+    aliases: 
+      - bal
+  pay:
+    description: Pay another player
+    usage: /<command> <player> <amount>
+    permission: cafe.pay
+  deposit:
+    description: Deposit your valuables as money into your account
+    usage: /<command>
+    permission: cafe.deposit
 #  warp:
 #    description: Teleport to a warp
 #    usage: /<command> <warp>

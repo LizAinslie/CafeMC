@@ -1,8 +1,8 @@
 package dev.lizainslie.cafemc.teleport.commands
 
-import dev.lizainslie.cafemc.chat.cmd.AllowedSender
-import dev.lizainslie.cafemc.chat.cmd.CommandContext
-import dev.lizainslie.cafemc.chat.cmd.PluginCommand
+import dev.lizainslie.cafemc.core.cmd.AllowedSender
+import dev.lizainslie.cafemc.core.cmd.CommandContext
+import dev.lizainslie.cafemc.core.cmd.PluginCommand
 import dev.lizainslie.cafemc.teleport.TeleportModule
 import dev.lizainslie.cafemc.teleport.tabCompleteRequests
 import dev.lizainslie.cafemc.teleport.withTpaRequest
@@ -11,7 +11,7 @@ import net.md_5.bungee.api.ChatColor
 object TpDenyCommand : PluginCommand(
     command = "tpdeny",
     description = "Deny a teleport request",
-    usage = "/tpdeny [player]",
+    usage = "[player]",
     allowedSender = AllowedSender.PLAYER,
     minArgs = 0,
     maxArgs = 1,

@@ -120,4 +120,6 @@ runs/
 
 
 # SQL Databases
-cafemc.db
+devServer/plugins/CafeMC/cafemc.db
+
+devServer/

@@ -7,6 +7,7 @@ import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
+import net.md_5.bungee.api.chat.hover.content.Text
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -67,12 +68,12 @@ object TeleportModule : PluginModule(), Listener {
                 .append("[Accept]")
                     .color(ChatColor.GREEN)
                     .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept ${sender.name}"))
-                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("/tpaccept ${sender.name}").create()))
+                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("/tpaccept ${sender.name}")))
                 .append(" or ").color(ChatColor.GRAY)
                 .append("[Deny]")
                     .color(ChatColor.RED)
                     .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpdeny ${sender.name}"))
-                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("/tpdeny ${sender.name}").create()))
+                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("/tpdeny ${sender.name}")))
                 .build()
         )
 

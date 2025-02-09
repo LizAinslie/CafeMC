@@ -10,7 +10,7 @@ import org.jetbrains.exposed.dao.id.UUIDTable
 import java.util.UUID
 
 class SavedLocation(id: EntityID<UUID>) : UUIDEntity(id) {
-    companion object : UUIDEntityClass<SavedLocation>(SavedLocationTable) {
+    companion object : UUIDEntityClass<SavedLocation>(SavedLocationsTable) {
         fun createFromBukkit(location: Location) = new(UUID.randomUUID()) {
             world = location.world!!
             x = location.x
@@ -21,12 +21,12 @@ class SavedLocation(id: EntityID<UUID>) : UUIDEntity(id) {
         }
     }
 
-    private var _world by SavedLocationTable.world
-    var x by SavedLocationTable.x
-    var y by SavedLocationTable.y
-    var z by SavedLocationTable.z
-    var yaw by SavedLocationTable.yaw
-    var pitch by SavedLocationTable.pitch
+    private var _world by SavedLocationsTable.world
+    var x by SavedLocationsTable.x
+    var y by SavedLocationsTable.y
+    var z by SavedLocationsTable.z
+    var yaw by SavedLocationsTable.yaw
+    var pitch by SavedLocationsTable.pitch
 
     var world: World
         get() = Bukkit.getWorld(_world) ?: error("World $_world not found")
@@ -37,7 +37,7 @@ class SavedLocation(id: EntityID<UUID>) : UUIDEntity(id) {
     fun getLocation() = Location(world, x, y, z, yaw, pitch)
 }
 
-object SavedLocationTable : UUIDTable("saved_locations") {
+object SavedLocationsTable : UUIDTable("saved_locations") {
     val world = varchar("world", 255)
     val x = double("x")
     val y = double("y")

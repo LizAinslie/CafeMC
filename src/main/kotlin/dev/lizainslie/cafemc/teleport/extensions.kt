@@ -1,6 +1,6 @@
 package dev.lizainslie.cafemc.teleport
 
-import dev.lizainslie.cafemc.chat.cmd.CommandContext
+import dev.lizainslie.cafemc.core.cmd.CommandContext
 import dev.lizainslie.cafemc.data.location.SavedLocation
 import dev.lizainslie.cafemc.data.player.PlayerSettings
 import net.md_5.bungee.api.ChatColor

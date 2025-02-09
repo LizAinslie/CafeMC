@@ -1,15 +1,15 @@
 package dev.lizainslie.cafemc.teleport.commands
 
-import dev.lizainslie.cafemc.chat.cmd.AllowedSender
-import dev.lizainslie.cafemc.chat.cmd.CommandContext
-import dev.lizainslie.cafemc.chat.cmd.PluginCommand
+import dev.lizainslie.cafemc.core.cmd.AllowedSender
+import dev.lizainslie.cafemc.core.cmd.CommandContext
+import dev.lizainslie.cafemc.core.cmd.PluginCommand
 import dev.lizainslie.cafemc.teleport.TeleportModule
 import org.bukkit.Bukkit
 
 object TpaCommand : PluginCommand(
     command = "tpa",
     description = "Request to teleport to a player",
-    usage = "/tpa <player>",
+    usage = "<player>",
     allowedSender = AllowedSender.PLAYER,
     minArgs = 1,
     maxArgs = 1,

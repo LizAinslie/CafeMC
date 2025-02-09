@@ -1,7 +1,7 @@
 package dev.lizainslie.cafemc.core
 
 import dev.lizainslie.cafemc.CafeMC
-import dev.lizainslie.cafemc.chat.cmd.PluginCommand
+import dev.lizainslie.cafemc.core.cmd.PluginCommand
 import org.bukkit.event.Listener
 
 abstract class PluginModule {

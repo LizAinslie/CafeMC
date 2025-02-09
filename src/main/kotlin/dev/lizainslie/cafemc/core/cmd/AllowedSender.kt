@@ -1,4 +1,4 @@
-package dev.lizainslie.cafemc.chat.cmd
+package dev.lizainslie.cafemc.core.cmd
 
 import org.bukkit.command.CommandSender
 import org.bukkit.command.ConsoleCommandSender

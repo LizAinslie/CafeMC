@@ -4,15 +4,20 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import dev.lizainslie.cafemc.afk.AfkModule
 import dev.lizainslie.cafemc.chat.ChatHandler
-import dev.lizainslie.cafemc.chat.cmd.CommandMap
+import dev.lizainslie.cafemc.core.cmd.CommandMap
 import dev.lizainslie.cafemc.commands.RenameCommand
 import dev.lizainslie.cafemc.data.commands.MigrateCommand
-import dev.lizainslie.cafemc.teleport.commands.HomeCommand
+import dev.lizainslie.cafemc.economy.EconomyModule
 import dev.lizainslie.cafemc.slime.SlimeFinderModule
 import dev.lizainslie.cafemc.teleport.TeleportModule
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.jetbrains.exposed.sql.Database
+
+internal val DB_TYPE_TO_DRIVER = mapOf(
+    "mysql" to "com.mysql.cj.jdbc.Driver",
+    "sqlite" to "org.sqlite.JDBC",
+)
 
 class CafeMC : JavaPlugin() {
     private val commandMap = CommandMap()
@@ -21,12 +26,13 @@ class CafeMC : JavaPlugin() {
         TeleportModule,
         AfkModule,
         SlimeFinderModule,
+        EconomyModule,
     )
     
     private lateinit var hikariConfig: HikariConfig
     
-    val hikariDataSource by lazy { HikariDataSource(hikariConfig) }
-
+    private val hikariDataSource by lazy { HikariDataSource(hikariConfig) }
+    
     override fun onEnable() {
         instance = this
 
@@ -40,7 +46,7 @@ class CafeMC : JavaPlugin() {
         
         hikariConfig = HikariConfig().apply {
             jdbcUrl = config.getString("db")!!
-            driverClassName = "org.sqlite.JDBC"
+            driverClassName = DB_TYPE_TO_DRIVER[config.getString("dbType", "sqlite")]!!
         }
 
         Database.connect(hikariDataSource)
