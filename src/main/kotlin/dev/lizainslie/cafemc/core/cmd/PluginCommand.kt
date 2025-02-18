@@ -1,5 +1,6 @@
 package dev.lizainslie.cafemc.core.cmd
 
+import org.bukkit.block.Block
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
@@ -33,7 +34,17 @@ data class CommandContext(
     val command: PluginCommand,
     val alias: String
 ) {
-    val player by lazy { sender as Player }
+    
+    val player by lazy {
+        assert(sender is Player) { "This command must be run by a player" }
+        sender as Player
+    }
+    
+    fun withLookingAt(errorMessage: String, block: (block: Block) -> Unit) {
+        player.getTargetBlockExact(5)?.let { block(it) } ?: sendError(errorMessage)
+        
+        
+    }
 
     fun sendError(message: String) {
         sender.sendMessage("${CommandMap.ERROR_PREFIX} $message")

@@ -35,7 +35,7 @@ object HomeCommand : PluginCommand(
                     player.setLastLocation(player.location)
                 }
 
-                player.teleport(home.getLocation())
+                player.teleport(home.location)
                 player.sendMessage("${ChatColor.GRAY}Teleported to your home.")
                 return@transaction
             }
@@ -47,7 +47,7 @@ object HomeCommand : PluginCommand(
                         settings.home = null
                     }
                     
-                    settings.home = SavedLocation.createFromBukkit(player.location)
+                    settings.home = SavedLocation.findOrCreate(player.location)
                     player.sendMessage("${ChatColor.GRAY}Home set.")
                 }
 

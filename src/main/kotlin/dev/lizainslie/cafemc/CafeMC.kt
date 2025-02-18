@@ -3,10 +3,12 @@ package dev.lizainslie.cafemc
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import dev.lizainslie.cafemc.afk.AfkModule
-import dev.lizainslie.cafemc.chat.ChatHandler
+import dev.lizainslie.cafemc.auditing.AuditModule
+import dev.lizainslie.cafemc.chat.ChatModule
 import dev.lizainslie.cafemc.core.cmd.CommandMap
 import dev.lizainslie.cafemc.commands.RenameCommand
 import dev.lizainslie.cafemc.data.commands.MigrateCommand
+import dev.lizainslie.cafemc.data.migrate
 import dev.lizainslie.cafemc.economy.EconomyModule
 import dev.lizainslie.cafemc.slime.SlimeFinderModule
 import dev.lizainslie.cafemc.teleport.TeleportModule
@@ -23,6 +25,8 @@ class CafeMC : JavaPlugin() {
     private val commandMap = CommandMap()
     private val config = getConfig()
     private val modules = listOf(
+        AuditModule,
+        ChatModule,
         TeleportModule,
         AfkModule,
         SlimeFinderModule,
@@ -50,8 +54,8 @@ class CafeMC : JavaPlugin() {
         }
 
         Database.connect(hikariDataSource)
-
-        Bukkit.getPluginManager().registerEvents(ChatHandler, this)
+        
+        migrate()
         
         modules.forEach { 
             it.register(this)

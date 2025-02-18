@@ -3,9 +3,12 @@ version: '0.1.0'
 main: dev.lizainslie.cafemc.CafeMC
 api-version: '1.21'
 
-depend:
-  - DiscordSRV
+softdepend:
+#  - DiscordSRV
   - TAB
+  - Vault
+
+loadbefore:
   - Vault
 
 permissions: 
@@ -27,6 +30,14 @@ permissions:
     description: Pay another player
   cafe.deposit:
     description: Deposit your valuables as money into your account
+  cafe.lock:
+    description: Lock a block
+  cafe.lock.bypass:
+    description: Bypass locked blocks
+  cafe.audit:
+    description: Audit logged incidents that you have clearance to see
+  cafe.audit.admin:
+    description: Audit logged incidents with no clearance restrictions
 
 commands:
   tpa:
@@ -74,6 +85,22 @@ commands:
     description: Deposit your valuables as money into your account
     usage: /<command>
     permission: cafe.deposit
+  lock:
+    description: Lock a block
+    usage: /<command>
+    permission: cafe.lock
+  unlock:
+    description: Unlock a block
+    usage: /<command>
+    permission: cafe.lock
+    
+  # admin commands
+  audit:
+    description: Audit logged incidents
+    usage: /<command> <incident_type|all> <get>
+#  testcomponent:
+#    description: Test component system
+#    usage: /<command> [runcommandtest]
 #  warp:
 #    description: Teleport to a warp
 #    usage: /<command> <warp>

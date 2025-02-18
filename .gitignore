@@ -123,3 +123,4 @@ runs/
 devServer/plugins/CafeMC/cafemc.db
 
 devServer/
+cafemc.db

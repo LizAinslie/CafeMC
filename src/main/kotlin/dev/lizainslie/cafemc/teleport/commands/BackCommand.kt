@@ -20,7 +20,7 @@ object BackCommand : PluginCommand(
         transaction { 
             val settings = PlayerSettings.find(player)
             settings?.lastLocation?.let { 
-                val location = it.getLocation() // get a Bukkit location
+                val location = it.location // get a Bukkit location
                 
                 // Delete the previous location in db
                 it.delete()

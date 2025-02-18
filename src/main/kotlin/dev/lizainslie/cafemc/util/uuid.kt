@@ -11,14 +11,14 @@ import java.util.*
 val uuidPattern = Regex("([0-9A-Fa-f]{8})([0-9A-Fa-f]{4})([0-9A-Fa-f]{4})([0-9A-Fa-f]{4})([0-9A-Fa-f]{12})")
 
 fun convertUuidWithoutDashesToUuidWithDashes(inputUuid: String) = uuidPattern.replace(inputUuid) { matchResult ->
-//    listOf(
-//        matchResult.groupValues[1],
-//        matchResult.groupValues[2],
-//        matchResult.groupValues[3],
-//        matchResult.groupValues[4],
-//        matchResult.groupValues[5]
-//    )
     matchResult.groupValues.subList(1, 6).joinToString("-")
+}
+
+fun isUuid(input: String) = try {
+    UUID.fromString(input)
+    true
+} catch (e: IllegalArgumentException) {
+    false
 }
 
 object UUIDSerializer : KSerializer<UUID> {

@@ -44,7 +44,7 @@ internal fun Player.setLastLocation(from: Location) {
             settings.lastLocation = null
         }
         
-        settings.lastLocation = SavedLocation.createFromBukkit(from)
+        settings.lastLocation = SavedLocation.findOrCreate(from)
 
         spigot().sendMessage(
             ComponentBuilder("Last location saved. ").color(ChatColor.GRAY)
