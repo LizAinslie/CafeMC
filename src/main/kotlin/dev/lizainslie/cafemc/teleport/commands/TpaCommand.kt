@@ -25,7 +25,7 @@ object TpaCommand : PluginCommand(
         TeleportModule.addRequest(player, target)
     }
 
-    override fun CommandContext.tabComplete() = when (args.size) {
+    override fun CommandContext.tabComplete(): List<String> = when (args.size) {
         0 -> Bukkit.getOnlinePlayers().map { it.name }
         1 -> Bukkit.getOnlinePlayers().map { it.name }.filter { it.startsWith(args[0], ignoreCase = true) }
         else -> emptyList()

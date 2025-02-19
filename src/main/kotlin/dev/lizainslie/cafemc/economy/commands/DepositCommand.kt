@@ -4,7 +4,6 @@ import dev.lizainslie.cafemc.core.cmd.AllowedSender
 import dev.lizainslie.cafemc.core.cmd.CommandContext
 import dev.lizainslie.cafemc.core.cmd.PluginCommand
 import dev.lizainslie.cafemc.economy.CafeEconomy
-import dev.lizainslie.cafemc.economy.EconomyModule
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent

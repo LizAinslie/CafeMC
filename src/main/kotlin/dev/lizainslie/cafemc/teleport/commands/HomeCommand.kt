@@ -68,7 +68,7 @@ object HomeCommand : PluginCommand(
         }
     }
 
-    override fun CommandContext.tabComplete() = 
+    override fun CommandContext.tabComplete(): List<String> = 
         when (args.size) {
             0 -> SUBCOMMANDS
             1 -> SUBCOMMANDS.filter { it.startsWith(args[0], ignoreCase = true) }

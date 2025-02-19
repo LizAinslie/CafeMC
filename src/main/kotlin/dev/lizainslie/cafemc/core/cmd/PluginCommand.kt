@@ -1,5 +1,6 @@
 package dev.lizainslie.cafemc.core.cmd
 
+import dev.lizainslie.cafemc.chat.sendError
 import org.bukkit.block.Block
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -19,9 +20,9 @@ abstract class PluginCommand(
         ctx.onCommand()
     }
     
-    fun complete(s: CommandSender,  args: List<String>, alias: String): List<String> {
+    fun complete(s: CommandSender,  args: List<String>, alias: String): MutableList<String> {
         val ctx = CommandContext(s, args, this, alias)
-        return ctx.tabComplete()
+        return ctx.tabComplete().toMutableList()
     }
 
     abstract fun CommandContext.onCommand()
@@ -40,13 +41,23 @@ data class CommandContext(
         sender as Player
     }
     
+    fun withLookingAt(errorMessage: String, distance: Int, block: (block: Block) -> Unit) {
+        player.getTargetBlockExact(distance)?.let { block(it) } ?: sendError(errorMessage)
+    }
+
     fun withLookingAt(errorMessage: String, block: (block: Block) -> Unit) {
-        player.getTargetBlockExact(5)?.let { block(it) } ?: sendError(errorMessage)
-        
-        
+        withLookingAt(errorMessage, 5, block)
+    }
+    
+    fun withLookingAt(distance: Int, block: (block: Block) -> Unit) {
+        withLookingAt("Look at a block", distance, block)
+    }
+    
+    fun withLookingAt(block: (block: Block) -> Unit) {
+        withLookingAt("Look at a block", block)
     }
 
     fun sendError(message: String) {
-        sender.sendMessage("${CommandMap.ERROR_PREFIX} $message")
+        sender.sendError(message)
     }
 }

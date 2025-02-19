@@ -26,5 +26,5 @@ object TpDenyCommand : PluginCommand(
         }
     }
     
-    override fun CommandContext.tabComplete() = tabCompleteRequests()
+    override fun CommandContext.tabComplete(): List<String> = tabCompleteRequests()
 }

@@ -4,7 +4,6 @@ import dev.lizainslie.cafemc.core.cmd.AllowedSender
 import dev.lizainslie.cafemc.core.cmd.CommandContext
 import dev.lizainslie.cafemc.core.cmd.PluginCommand
 import dev.lizainslie.cafemc.economy.CafeEconomy
-import dev.lizainslie.cafemc.economy.EconomyModule
 import dev.lizainslie.cafemc.util.AccountUtils
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -43,17 +42,20 @@ object BalanceCommand : PluginCommand(
         player.sendMessage("${ChatColor.GRAY}$formattedTargetName balance is ${ChatColor.GOLD}$formattedBalance${ChatColor.GRAY}.")
     }
 
-    override fun CommandContext.tabComplete(): List<String> {
+    override fun CommandContext.tabComplete(): MutableList<String> {
         return when (args.size) {
             0 ->
                 if (sender.hasPermission("cafe.economy.balance.others"))
-                    Bukkit.getOnlinePlayers().map { it.name }
-                else emptyList()
+                    Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
+                else mutableListOf()
             1 -> 
                 if (sender.hasPermission("cafe.economy.balance.others"))
-                    Bukkit.getOnlinePlayers().map { it.name }.filter { it.startsWith(args[0], ignoreCase = true) }
-                else emptyList()
-            else -> emptyList()
+                    Bukkit.getOnlinePlayers()
+                        .map { it.name }
+                        .filter { it.startsWith(args[0], ignoreCase = true) }
+                        .toMutableList()
+                else mutableListOf()
+            else -> mutableListOf()
         }
     }
 }

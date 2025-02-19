@@ -55,7 +55,7 @@ object AuditCommand : PluginCommand(
 
     }
     
-    override fun CommandContext.tabComplete(): List<String> {
+    override fun CommandContext.tabComplete(): MutableList<String> {
         TODO() // this is gonna be a fun one
     }
 }

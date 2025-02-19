@@ -13,9 +13,9 @@ import org.bukkit.event.player.PlayerQuitEvent
 
 object ChatModule : PluginModule(), Listener {
     
-//    init {
-//        commands += TestComponentCommand
-//    }
+    init {
+        commands += TestComponentCommand
+    }
     
     // region Event Handlers
     

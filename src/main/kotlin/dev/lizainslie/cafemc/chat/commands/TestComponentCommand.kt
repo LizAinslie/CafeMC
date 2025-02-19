@@ -1,14 +1,14 @@
 package dev.lizainslie.cafemc.chat.commands
 
-import dev.lizainslie.cafemc.chat.sendMessage
+import dev.lizainslie.cafemc.chat.addRichLoreLine
+import dev.lizainslie.cafemc.chat.sendRichMessage
+import dev.lizainslie.cafemc.chat.setRichDisplayName
 import dev.lizainslie.cafemc.core.cmd.AllowedSender
 import dev.lizainslie.cafemc.core.cmd.CommandContext
 import dev.lizainslie.cafemc.core.cmd.PluginCommand
-import net.md_5.bungee.api.ChatColor
-import net.md_5.bungee.api.chat.ClickEvent
-import net.md_5.bungee.api.chat.ComponentBuilder
-import net.md_5.bungee.api.chat.HoverEvent
-import net.md_5.bungee.api.chat.hover.content.Item
+import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemStack
@@ -19,39 +19,32 @@ object TestComponentCommand : PluginCommand(
     allowedSender = AllowedSender.PLAYER,
     minArgs = 0,
     maxArgs = 1,
-    
+
 ) {
     override fun CommandContext.onCommand() {
         when (args.size) {
             0 -> {
-                player.sendMessage {
-                    text("Command & Hover Content Test") {
+                player.sendRichMessage {
+                    text("Command & Hover Content Test (Custom Color)") {
                         italic = true
-                        color = ChatColor.RED
+                        color = TextColor.color(0xdc3545)
 
                         events {
                             hover {
-                                textContent {
-                                    text("/testcomponent") {
-                                        bold = true
-                                        color = ChatColor.GOLD
-                                    }
+                                text("/testcomponent") {
+                                    bold = true
+                                    color = NamedTextColor.GOLD
+                                }
 
-                                    text(" ") {
-                                        reset()
-                                    }
+                                text(" ")
 
-                                    text("runcommandtest") {
-                                        italic = true
-                                        color = ChatColor.YELLOW
-                                    }
+                                text("runcommandtest") {
+                                    italic = true
+                                    color = NamedTextColor.YELLOW
                                 }
                             }
 
-                            click {
-                                action = ClickEvent.Action.RUN_COMMAND
-                                value = "/testcomponent runcommandtest"
-                            }
+                            click = ClickEvent.runCommand("/testcomponent runcommandtest")
                         }
                     }
 
@@ -60,17 +53,12 @@ object TestComponentCommand : PluginCommand(
                     text("Open URL Test & Hover Entity Test") {
                         bold = true
                         underlined = true
-                        color = ChatColor.GREEN
+                        color = NamedTextColor.GREEN
 
                         events {
-                            hover {
-                                entityContent("minecraft:player", player.uniqueId.toString(), player.name)
-                            }
+                            hover(player) // entity
 
-                            click {
-                                action = ClickEvent.Action.OPEN_URL
-                                value = "https://lizainslie.dev"
-                            }
+                            click = ClickEvent.openUrl("https://lizainslie.dev")
                         }
                     }
 
@@ -79,30 +67,53 @@ object TestComponentCommand : PluginCommand(
                     text("Hover ItemStack & Click Clipboard Test") {
                         strikethrough = true
                         obfuscated = true
-                        color = ChatColor.BLUE
+                        color = NamedTextColor.BLUE
 
                         events {
-                            hover {
-                                val item = ItemStack(Material.DIAMOND)
-                                val meta = item.itemMeta?.apply {
-                                    setDisplayName("${ChatColor.DARK_PURPLE}${ChatColor.MAGIC}!i${ChatColor.RESET}${ChatColor.LIGHT_PURPLE}Diamond${ChatColor.DARK_PURPLE}${ChatColor.MAGIC}!i${ChatColor.RESET}")
-                                    lore = listOf(
-                                        "${ChatColor.AQUA}${ChatColor.ITALIC}A shiny diamond",
-                                        "${ChatColor.YELLOW}Oooooh, shiny!",
-                                        "",
-                                        "${ChatColor.GRAY}Click to copy a hidden message"
-                                    )
+                            hover(ItemStack(Material.DIAMOND).apply {
+                                itemMeta = itemMeta?.apply {
+                                    setRichDisplayName { 
+                                        text("!i") {
+                                            color = NamedTextColor.DARK_PURPLE
+                                            obfuscated = true
+                                        }
+                                        text("Diamond") {
+                                            color = NamedTextColor.LIGHT_PURPLE
+                                        }
+                                        text("!i") {
+                                            color = NamedTextColor.DARK_PURPLE
+                                            obfuscated = true
+                                        }
+                                    }
+                                    
+                                    addRichLoreLine {
+                                        text("A shiny diamond") {
+                                            color = NamedTextColor.AQUA
+                                            italic = true
+                                        }
+                                    }
+                                    
+                                    addRichLoreLine {
+                                        text("Oooooh, shiny!") {
+                                            color = NamedTextColor.YELLOW
+                                        }
+                                    }
+                                    
+                                    addRichLoreLine {
+                                        text("")
+                                    }
+                                    
+                                    addRichLoreLine {
+                                        text("Click to copy a hidden message") {
+                                            color = NamedTextColor.GRAY
+                                        }
+                                    }
+                                    
                                     addEnchant(Enchantment.FORTUNE, 100, true)
                                 }
-                                item.itemMeta = meta
+                            })
 
-                                itemContent(item)
-                            }
-
-                            click {
-                                action = ClickEvent.Action.COPY_TO_CLIPBOARD
-                                value = "im a baka"
-                            }
+                            click = ClickEvent.copyToClipboard("im a baka")
                         }
                     }
                 }
@@ -110,7 +121,22 @@ object TestComponentCommand : PluginCommand(
             1 -> {
                 when (args[0].lowercase()) {
                     "runcommandtest" -> {
-                        player.sendMessage("Command test successful!")
+                        player.sendRichMessage {
+                            text("Command test successful! ")
+                            text("Click here to run a callback") {
+                                color = NamedTextColor.GOLD
+                                
+                                events {
+                                    click = ClickEvent.callback { 
+                                        it.sendRichMessage { 
+                                            text("Callback test successful!") {
+                                                color = NamedTextColor.GREEN
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -1,9 +1,15 @@
+import xyz.jpenilla.resourcefactory.bukkit.BukkitPluginYaml
+
 plugins {
     kotlin("jvm") version "2.1.0"
     kotlin("plugin.serialization") version "2.1.0"
+
+    id("com.gradleup.shadow") version "8.3.5"
+
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.14"
     
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("dev.lizainslie.mcdevserver") version "0.1.0"
+    id("xyz.jpenilla.run-paper") version "2.3.1" // Adds runServer and runMojangMappedServer tasks for testing
+    id("xyz.jpenilla.resource-factory-bukkit-convention") version "1.2.0" // Generates plugin.yml based on the Gradle config
 }
 
 group = "dev.lizainslie"
@@ -37,7 +43,8 @@ val exposedVersion: String by project
 
 dependencies {
     // platform
-    compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
+//    compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
@@ -67,13 +74,19 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 
+configurations.configureEach {
+    resolutionStrategy.capabilitiesResolution.withCapability("org.bukkit:bukkit") {
+        selectHighestVersion()
+    }
+}
+
 val targetJavaVersion = 21
 kotlin {
     jvmToolchain(targetJavaVersion)
 }
 
 tasks.build {
-    dependsOn("shadowJar")
+    dependsOn(tasks.reobfJar)
 }
 
 tasks.processResources {
@@ -85,6 +98,156 @@ tasks.processResources {
     }
 }
 
-mcDevServer {
-    minecraftVersion = "1.21.4"
+bukkitPluginYaml {
+    main = "dev.lizainslie.cafemc.CafeMC"
+    load = BukkitPluginYaml.PluginLoadOrder.STARTUP
+    apiVersion = "1.21.4"
+    softDepend = listOf("TAB", "Vault")
+    loadBefore = listOf("Vault")
+    
+    authors = listOf("LizzyTheWitch")
+    
+    permissions {
+        register("cafe.tpa.use") {
+            description = "Teleport to a player & accept/deny requests"
+        }
+
+        register("cafe.tpa.back") {
+            description = "Teleport back to your previous location"
+        }
+
+        register("cafe.afk") {
+            description = "Toggle AFK status"
+        }
+
+        register("cafe.rename") {
+            description = "Rename the item in your hand"
+        }
+        
+        register("cafe.home") {
+            description = "Teleport to & set your home"
+        }
+        
+        register("cafe.balance") {
+            description = "Check your balance"
+        }
+        
+        register("cafe.balance.others") {
+            description = "Check another player's balance"
+        }
+        
+        register("cafe.pay") {
+            description = "Pay another player"
+        }
+        
+        register("cafe.deposit") {
+            description = "Deposit your valuables as money into your account"
+        }
+        
+        register("cafe.lock") {
+            description = "Lock a block"
+        }
+        
+        register("cafe.lock.bypass") {
+            description = "Bypass locked blocks"
+        }
+        
+        register("cafe.audit") {
+            description = "Audit logged incidents that you have clearance to see"
+        }
+        
+        register("cafe.audit.admin") {
+            description = "Audit all logged incidents"
+        }
+    }
+    
+    commands {
+        register("tpa") {
+            description = "Request to teleport to a player"
+            permission = "cafe.tpa.use"
+            usage = "/<command> <player>"
+        }
+        
+        register("tpaccept") {
+            description = "Accept a teleport request"
+            permission = "cafe.tpa.use"
+            usage = "/<command> [player]"
+        }
+        
+        register("tpdeny") {
+            description = "Deny a teleport request"
+            permission = "cafe.tpa.use"
+            usage = "/<command> [player]"
+        }
+        
+        register("back") {
+            description = "Teleport back to your previous location"
+            permission = "cafe.tpa.back"
+            usage = "/<command>"
+        }
+        
+        register("afk") {
+            description = "Toggle AFK status"
+            permission = "cafe.afk"
+            usage = "/<command>"
+        }
+        
+        register("rename") {
+            description = "Rename the item in your hand"
+            permission = "cafe.rename"
+            usage = "/<command> <name>"
+        }
+        
+        register("home") {
+            description = "Teleport to & set your home"
+            permission = "cafe.home"
+            usage = "/<command> [set|clear]"
+        }
+        
+        register("migrate") {
+            description = "Migrate database changes"
+        }
+        
+        register("balance") {
+            description = "Check your balance or the balance of another player"
+            permission = "cafe.balance"
+            usage = "/<command> [player]"
+            aliases = listOf("bal")
+        }
+        
+        register("pay") {
+            description = "Pay another player"
+            permission = "cafe.pay"
+            usage = "/<command> <player> <amount>"
+        }
+        
+        register("deposit") {
+            description = "Deposit your valuables as money into your account"
+            permission = "cafe.deposit"
+            usage = "/<command> [open]"
+        }
+        
+        register("lock") {
+            description = "Lock a block"
+            permission = "cafe.lock"
+            usage = "/<command>"
+        }
+        
+        register("unlock") {
+            description = "Unlock a block"
+            permission = "cafe.lock"
+            usage = "/<command>"
+        }
+        
+        register("audit") {
+            description = "Audit logged incidents"
+            permission = "cafe.audit"
+            usage = "/<command> <incident_type|all> <get|list|find> [id|param=value] [param=value]..."
+        }
+        
+        register("testcomponent") {
+            description = "Test the component system"
+            usage = "/<command> [runcommandtest]"
+        }
+    }
 }

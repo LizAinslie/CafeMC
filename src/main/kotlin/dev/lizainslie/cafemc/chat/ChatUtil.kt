@@ -7,9 +7,12 @@ import github.scarsz.discordsrv.dependencies.jda.api.entities.MessageEmbed
 import github.scarsz.discordsrv.util.DiscordUtil
 import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 object ChatUtil {
+    val ERROR_PREFIX = "${ChatColor.RED}${ChatColor.BOLD}Error:${ChatColor.RESET}${ChatColor.GRAY}"
 
     /**
      * Broadcast a [message] to all online players excluding those that do not pass the [filter].
@@ -51,4 +54,10 @@ object ChatUtil {
     fun broadcastEmbedToDiscord(builder: EmbedBuilderDsl.() -> Unit) {
         broadcastEmbedToDiscord(DiscordUtils.buildEmbed(builder))
     }
+    
+    fun sendError(commandSender: CommandSender, message: String) {
+        commandSender.sendMessage("$ERROR_PREFIX $message")
+    }
 }
+
+fun CommandSender.sendError(message: String) = ChatUtil.sendError(this, message)

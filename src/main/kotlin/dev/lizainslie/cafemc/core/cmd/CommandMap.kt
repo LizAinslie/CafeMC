@@ -1,5 +1,7 @@
 package dev.lizainslie.cafemc.core.cmd
 
+import dev.lizainslie.cafemc.chat.ChatUtil
+import dev.lizainslie.cafemc.chat.sendError
 import org.bukkit.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
@@ -24,28 +26,28 @@ class CommandMap : CommandExecutor, TabCompleter {
             val pluginCommand = commands[command.name]
             
             if (pluginCommand == null) { // Command not found
-                sender.sendMessage("$ERROR_PREFIX Command /$label not found.")
+                sender.sendError("Command /$label not found.")
                 return true
             }
 
             if (pluginCommand.permission != null && !sender.hasPermission(pluginCommand.permission)) {
-                sender.sendMessage("$ERROR_PREFIX You do not have permission to use this command.")
+                sender.sendError("You do not have permission to use this command.")
                 return true
             }
 
             if (!pluginCommand.allowedSender.check(sender)) {
-                sender.sendMessage("$ERROR_PREFIX ${pluginCommand.allowedSender.errorMessage}")
+                sender.sendError(pluginCommand.allowedSender.errorMessage)
                 return true
             }
 
             if (((pluginCommand.minArgs != -1) && args.size < pluginCommand.minArgs) || ((pluginCommand.maxArgs != -1) && args.size > pluginCommand.maxArgs)) {
-                sender.sendMessage("$ERROR_PREFIX Invalid arguments. Usage: ${ChatColor.GOLD}/$label${if (pluginCommand.usage.isNotEmpty()) " " else ""}${pluginCommand.usage}${ChatColor.GRAY}.")
+                sender.sendError("Invalid arguments. Usage: ${ChatColor.GOLD}/$label${if (pluginCommand.usage.isNotEmpty()) " " else ""}${pluginCommand.usage}${ChatColor.GRAY}.")
                 return true
             }
 
             pluginCommand.handle(sender, args.asList(), label)
         } catch (e: Exception) {
-            sender.sendMessage("$ERROR_PREFIX An error occurred while executing the command. ${e.message}")
+            sender.sendMessage("${ChatUtil.ERROR_PREFIX} An error occurred while executing the command. ${e.message}")
             logger.warning(e.message)
             logger.warning(e.stackTraceToString())
         }
@@ -57,11 +59,11 @@ class CommandMap : CommandExecutor, TabCompleter {
         sender: CommandSender,
         command: Command,
         label: String,
-        args: Array<out String>?
-    ): List<String>? {
+        args: Array<out String>
+    ): MutableList<String>? {
         val pluginCommand = commands[command.name] ?: return null
 
-        return pluginCommand.complete(sender, args?.asList() ?: emptyList(), label)
+        return pluginCommand.complete(sender, args.asList(), label)
     }
 
     fun register() {
@@ -69,9 +71,5 @@ class CommandMap : CommandExecutor, TabCompleter {
             Bukkit.getPluginCommand(command)?.setExecutor(this)
             Bukkit.getPluginCommand(command)?.tabCompleter = this
         }
-    }
-    
-    companion object {
-        val ERROR_PREFIX = "${ChatColor.RED}${ChatColor.BOLD}Error:${ChatColor.RESET}${ChatColor.GRAY}"
     }
 }
