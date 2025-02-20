@@ -1,10 +1,12 @@
 package dev.lizainslie.cafemc.economy.commands
 
+import dev.lizainslie.cafemc.chat.sendRichMessage
 import dev.lizainslie.cafemc.core.cmd.AllowedSender
 import dev.lizainslie.cafemc.core.cmd.CommandContext
 import dev.lizainslie.cafemc.core.cmd.PluginCommand
 import dev.lizainslie.cafemc.economy.CafeEconomy
 import dev.lizainslie.cafemc.util.AccountUtils
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
@@ -30,16 +32,24 @@ object BalanceCommand : PluginCommand(
             AccountUtils.getUuidForAccountName(args[0])?.let { 
                 target = Bukkit.getOfflinePlayer(it)
                 targetIsSender = false
-            } ?: return sendError("Player ${args[0]} not found")
+            } ?: return sendRichError {
+                text("Player ") 
+                text(args[0]) { color = NamedTextColor.BLUE }
+                text(" not found.")
+            }
         }
         
         val balance = CafeEconomy.getBalance(target)
         val formattedBalance = CafeEconomy.format(balance)
-        val formattedTargetName = 
-            if (targetIsSender) "Your"
-            else "${ChatColor.BLUE}${target.name}${ChatColor.GRAY}'s"
         
-        player.sendMessage("${ChatColor.GRAY}$formattedTargetName balance is ${ChatColor.GOLD}$formattedBalance${ChatColor.GRAY}.")
+        player.sendRichMessage { 
+            if (targetIsSender) text("Your") { color = NamedTextColor.GRAY }
+            else text("${target.name}'s") { color = NamedTextColor.BLUE }
+            
+            text(" balance is ") { color = NamedTextColor.GRAY }
+            text(formattedBalance) { color = NamedTextColor.GOLD }
+            text(".") { color = NamedTextColor.GRAY }
+        }
     }
 
     override fun CommandContext.tabComplete(): MutableList<String> {

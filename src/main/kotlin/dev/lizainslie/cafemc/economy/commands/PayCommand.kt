@@ -1,5 +1,6 @@
 package dev.lizainslie.cafemc.economy.commands
 
+import dev.lizainslie.cafemc.chat.sendRichMessage
 import dev.lizainslie.cafemc.core.cmd.AllowedSender
 import dev.lizainslie.cafemc.core.cmd.CommandContext
 import dev.lizainslie.cafemc.core.cmd.PluginCommand
@@ -7,6 +8,7 @@ import dev.lizainslie.cafemc.economy.CafeEconomy
 import dev.lizainslie.cafemc.economy.EconomyModule
 import dev.lizainslie.cafemc.economy.data.PlayerTransaction
 import dev.lizainslie.cafemc.util.AccountUtils
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -30,14 +32,25 @@ object PayCommand : PluginCommand(
             return
         }
 
-        if (!CafeEconomy.has(player, amount)) return sendError("You do not have enough money. Run ${ChatColor.GOLD}/balance${ChatColor.GRAY} to check your balance.")
+        if (!CafeEconomy.has(player, amount)) return sendRichError {
+            text("You do not have enough money. Run ") 
+            text("/balance") { color = NamedTextColor.GOLD }
+            text(" to check your balance.")
+        }
 
         CafeEconomy.withdrawPlayer(player, amount)
         CafeEconomy.depositPlayer(target, amount)
         
         val formattedAmount = CafeEconomy.format(amount)
 
-        player.sendMessage("You paid ${target.name} $formattedAmount")
+        player.sendRichMessage { 
+            text("You paid ") { color = NamedTextColor.GRAY }
+            text(target.name.toString()) { color = NamedTextColor.BLUE }
+            space()
+            text(formattedAmount) { color = NamedTextColor.GOLD }
+            text(".") { color = NamedTextColor.GRAY }
+        }
+        
         val targetPlayer = Bukkit.getPlayer(target.uniqueId)
         
         var notified = false

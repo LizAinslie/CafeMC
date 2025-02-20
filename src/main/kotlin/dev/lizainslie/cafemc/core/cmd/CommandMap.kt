@@ -1,8 +1,8 @@
 package dev.lizainslie.cafemc.core.cmd
 
-import dev.lizainslie.cafemc.chat.ChatUtil
 import dev.lizainslie.cafemc.chat.sendError
-import org.bukkit.ChatColor
+import dev.lizainslie.cafemc.chat.sendRichError
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -26,7 +26,11 @@ class CommandMap : CommandExecutor, TabCompleter {
             val pluginCommand = commands[command.name]
             
             if (pluginCommand == null) { // Command not found
-                sender.sendError("Command /$label not found.")
+                sender.sendRichError { 
+                    text("Command ") 
+                    text("/$label") { color = NamedTextColor.GOLD }
+                    text(" not found.")
+                }
                 return true
             }
 
@@ -41,13 +45,26 @@ class CommandMap : CommandExecutor, TabCompleter {
             }
 
             if (((pluginCommand.minArgs != -1) && args.size < pluginCommand.minArgs) || ((pluginCommand.maxArgs != -1) && args.size > pluginCommand.maxArgs)) {
-                sender.sendError("Invalid arguments. Usage: ${ChatColor.GOLD}/$label${if (pluginCommand.usage.isNotEmpty()) " " else ""}${pluginCommand.usage}${ChatColor.GRAY}.")
+                sender.sendRichError {
+                    text("Invalid arguments. Usage: ")
+                    text("/$label") { color = NamedTextColor.GOLD }
+                    
+                    if (pluginCommand.usage.isNotEmpty()) text(" ${pluginCommand.usage}") { 
+                        color = NamedTextColor.YELLOW
+                    }
+                    
+                    text(".")
+                }
                 return true
             }
 
             pluginCommand.handle(sender, args.asList(), label)
         } catch (e: Exception) {
-            sender.sendMessage("${ChatUtil.ERROR_PREFIX} An error occurred while executing the command. ${e.message}")
+            sender.sendError("An error occurred while executing the command. ${e.message}")
+            sender.sendRichError { 
+                text("An error occurred while executing the command. ")
+                text(e.message ?: "Unknown error") { color = NamedTextColor.RED }
+            }
             logger.warning(e.message)
             logger.warning(e.stackTraceToString())
         }

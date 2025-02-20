@@ -5,25 +5,25 @@ import dev.lizainslie.cafemc.util.EmbedBuilderDsl
 import github.scarsz.discordsrv.DiscordSRV
 import github.scarsz.discordsrv.dependencies.jda.api.entities.MessageEmbed
 import github.scarsz.discordsrv.util.DiscordUtil
-import net.md_5.bungee.api.chat.BaseComponent
+import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
-import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 object ChatUtil {
-    val ERROR_PREFIX = "${ChatColor.RED}${ChatColor.BOLD}Error:${ChatColor.RESET}${ChatColor.GRAY}"
-
     /**
-     * Broadcast a [message] to all online players excluding those that do not pass the [filter].
+     * Broadcast a [block] to all online players excluding those that do not pass the [filter].
      *
      * @param sendToDiscord Optionally send the message to Discord as well.
      */
-    fun broadcast(message: BaseComponent, sendToDiscord: Boolean = true, filter: (player: Player) -> Boolean = { true }) {
-        if(sendToDiscord) broadcastTextToDiscord(message.toPlainText())
+    fun broadcast(block: ComponentDsl.() -> Unit, sendToDiscord: Boolean = true, filter: (player: Player) -> Boolean = { true }) {
+        if(sendToDiscord) broadcastTextToDiscord(component(block).toPlainText())
         
         Bukkit.getServer().onlinePlayers.filter(filter).forEach {
-            it.spigot().sendMessage(message)
+            it.sendRichMessage(block)
         }
     }
 
@@ -40,8 +40,11 @@ object ChatUtil {
         }
     }
     
-    fun broadcast(message: String, filter: (player: Player) -> Boolean) = broadcast(message, true, filter)
-    fun broadcast(message: BaseComponent, filter: (player: Player) -> Boolean) = broadcast(message, true, filter)
+    fun broadcast(message: String, filter: (player: Player) -> Boolean) = 
+        broadcast(message, true, filter)
+    
+    fun broadcast(block: ComponentDsl.() -> Unit, filter: (player: Player) -> Boolean) = 
+        broadcast(block, true, filter)
     
     fun broadcastTextToDiscord(message: String) {
         DiscordUtil.sendMessage(DiscordSRV.getPlugin().mainTextChannel, message)
@@ -55,9 +58,39 @@ object ChatUtil {
         broadcastEmbedToDiscord(DiscordUtils.buildEmbed(builder))
     }
     
-    fun sendError(commandSender: CommandSender, message: String) {
-        commandSender.sendMessage("$ERROR_PREFIX $message")
+    fun sendError(audience: Audience, message: String) {
+        audience.sendRichMessage { 
+            text("Error:") {
+                color = NamedTextColor.RED
+                bold = true
+            }
+            
+            space()
+            
+            text(message) {
+                color = NamedTextColor.GRAY
+            }
+        }
     }
+    
+    fun sendRichError(audience: Audience, block: ComponentDsl.() -> Unit) {
+        audience.sendRichMessage { 
+            text("Error:") {
+                color = NamedTextColor.RED
+                bold = true
+            }
+            
+            space()
+            
+            text(component(block))
+        }
+    }
+    
+    fun translateAmpersand(message: Component) = 
+        LegacyComponentSerializer.legacyAmpersand().deserialize(message.toPlainText())
 }
 
-fun CommandSender.sendError(message: String) = ChatUtil.sendError(this, message)
+fun Component.toPlainText() = PlainTextComponentSerializer.plainText().serialize(this)
+
+fun Audience.sendError(message: String) = ChatUtil.sendError(this, message)
+fun Audience.sendRichError(block: ComponentDsl.() -> Unit) = ChatUtil.sendRichError(this, block)

@@ -1,6 +1,8 @@
 package dev.lizainslie.cafemc.core.cmd
 
+import dev.lizainslie.cafemc.chat.ComponentDsl
 import dev.lizainslie.cafemc.chat.sendError
+import dev.lizainslie.cafemc.chat.sendRichError
 import org.bukkit.block.Block
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -59,5 +61,9 @@ data class CommandContext(
 
     fun sendError(message: String) {
         sender.sendError(message)
+    }
+    
+    fun sendRichError(block: ComponentDsl.() -> Unit) {
+        sender.sendRichError(block)
     }
 }
