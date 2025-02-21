@@ -11,11 +11,10 @@ import dev.lizainslie.cafemc.data.commands.MigrateCommand
 import dev.lizainslie.cafemc.data.migrate
 import dev.lizainslie.cafemc.economy.EconomyModule
 import dev.lizainslie.cafemc.item.CustomItemsModule
+import dev.lizainslie.cafemc.elytra.ElytraModule
 import dev.lizainslie.cafemc.protect.ProtectionModule
 import dev.lizainslie.cafemc.slime.SlimeFinderModule
-import dev.lizainslie.cafemc.spawner.SpawnerModule
 import dev.lizainslie.cafemc.teleport.TeleportModule
-import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.jetbrains.exposed.sql.Database
 
@@ -33,10 +32,10 @@ class CafeMC : JavaPlugin() {
         TeleportModule,
         AfkModule,
         SlimeFinderModule,
-        EconomyModule,
         ProtectionModule,
         CustomItemsModule,
-        SpawnerModule,
+        EconomyModule,
+        ElytraModule,
     )
     
     private lateinit var hikariConfig: HikariConfig
