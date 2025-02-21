@@ -1,6 +1,9 @@
 package dev.lizainslie.cafemc.item
 
+import dev.lizainslie.cafemc.chat.ComponentDsl
+import dev.lizainslie.cafemc.chat.component
 import dev.lizainslie.cafemc.util.ItemUtils
+import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
@@ -13,11 +16,21 @@ import org.bukkit.inventory.meta.ItemMeta
 abstract class CustomItemBase(
     val id: String,
     val material: Material,
-    val name: String = ItemUtils.getDefaultName(material),
-    val lore: List<String> = emptyList(),
     val glint: Boolean = false,
     val canPlace: Boolean = true,
 ) {
+
+    var name: Component = Component.text(ItemUtils.getDefaultName(material))
+    val lore = mutableListOf<Component>()
+    
+    fun name(block: ComponentDsl.() -> Unit) {
+        name = component(block)
+    }
+    
+    fun loreLine(block: ComponentDsl.() -> Unit) {
+        lore += component(block)
+    }
+    
     /**
      * Create a new ItemStack of this custom item.
      * 
@@ -26,8 +39,8 @@ abstract class CustomItemBase(
     open fun create(amount: Int): ItemStack {
         val stack = ItemStack(material, amount).apply {
             itemMeta = itemMeta?.apply {
-                setDisplayName(name)
-                lore = this@CustomItemBase.lore
+                displayName(name)
+                lore(this@CustomItemBase.lore)
 
                 if (glint) setEnchantmentGlintOverride(true)
 

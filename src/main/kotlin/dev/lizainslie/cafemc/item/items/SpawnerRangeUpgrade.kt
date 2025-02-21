@@ -1,10 +1,10 @@
 package dev.lizainslie.cafemc.item.items
 
 import dev.lizainslie.cafemc.CafeMC
+import dev.lizainslie.cafemc.chat.sendRichMessage
 import dev.lizainslie.cafemc.item.CustomItemBase
 import dev.lizainslie.cafemc.item.CustomItemUseResult
-import dev.lizainslie.cafemc.item.data.UpgradedSpawner
-import org.bukkit.ChatColor
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.block.Block
@@ -20,11 +20,21 @@ internal const val SPAWNER_UPGRADE_RANGE = 16
 object SpawnerRangeUpgrade : CustomItemBase(
     "spawner_range_upgrade",
     Material.LIGHTNING_ROD,
-    name = "${ChatColor.LIGHT_PURPLE}Spawner Range Upgrade",
-    lore = listOf("Increase the range of any spawner by $SPAWNER_UPGRADE_RANGE blocks"),
     glint = true,
     canPlace = false,
 ) {
+    init {
+        name { 
+            text("Spawner Range Upgrade") { color = NamedTextColor.LIGHT_PURPLE }
+        }
+        
+        loreLine {
+            text("Increase the range of any spawner by ") { color = NamedTextColor.GRAY }
+            text("$SPAWNER_UPGRADE_RANGE") { color = NamedTextColor.GOLD }
+            text(" blocks") { color = NamedTextColor.GRAY }
+        }
+    }
+    
     val SPAWNER_UPGRADE_KEY by lazy { NamespacedKey(CafeMC.instance, "spawner_upgrade") }
     val SPAWNER_APPLIED_UPGRADES_KEY by lazy { NamespacedKey(CafeMC.instance, "spawner_applied_upgrades") }
     val SPAWNER_UPGRADE_MAX = 5
@@ -48,8 +58,23 @@ object SpawnerRangeUpgrade : CustomItemBase(
         spawner.persistentDataContainer.set(SPAWNER_APPLIED_UPGRADES_KEY, PersistentDataType.INTEGER, newUpgradeCount)
         spawner.requiredPlayerRange += SPAWNER_UPGRADE_RANGE
         
-        player.sendMessage("${ChatColor.GRAY}Spawner range increased by $SPAWNER_UPGRADE_RANGE blocks. ($newUpgradeCount/$SPAWNER_UPGRADE_MAX upgrades applied)")
-        player.sendMessage("${ChatColor.GRAY}Its new range is ${ChatColor.GOLD}${spawner.requiredPlayerRange} blocks${ChatColor.GRAY}.")
+        player.sendRichMessage { 
+            text("Spawner range increased by ") { color = NamedTextColor.GRAY }
+            text("$SPAWNER_UPGRADE_RANGE") { color = NamedTextColor.GOLD }
+            text(" blocks. (") { color = NamedTextColor.GRAY }
+            text("$newUpgradeCount") { 
+                color = 
+                    if (newUpgradeCount == SPAWNER_UPGRADE_MAX) NamedTextColor.RED
+                    else NamedTextColor.GREEN
+            }
+            text("/") { color = NamedTextColor.GRAY }
+            text("$SPAWNER_UPGRADE_MAX") { color = NamedTextColor.GOLD }
+            text(" upgrades applied)") { color = NamedTextColor.GRAY }
+            newline()
+            text("Its new range is ") { color = NamedTextColor.GRAY }
+            text("${spawner.requiredPlayerRange} blocks") { color = NamedTextColor.GOLD }
+            text(".") { color = NamedTextColor.GRAY }
+        }
         
         return CustomItemUseResult.ConsumeItem
     }

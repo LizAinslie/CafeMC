@@ -2,14 +2,16 @@ package dev.lizainslie.cafemc.protect
 
 import dev.lizainslie.cafemc.CafeMC
 import dev.lizainslie.cafemc.auditing.AuditModule
+import dev.lizainslie.cafemc.chat.sendError
+import dev.lizainslie.cafemc.chat.sendRichMessage
 import dev.lizainslie.cafemc.core.PluginModule
 import dev.lizainslie.cafemc.protect.commands.LockCommand
 import dev.lizainslie.cafemc.protect.commands.UnlockCommand
 import dev.lizainslie.cafemc.protect.data.LockedBlock
 import dev.lizainslie.cafemc.protect.data.LockedBlockBreakIncident
 import dev.lizainslie.cafemc.util.ItemUtils
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -92,7 +94,8 @@ object ProtectionModule : PluginModule(), Listener {
             if (block.type in LOCKABLE_BLOCKS && block.hasMetadata("locked")) {
                 if (!player.hasPermission("cafemc.lock.bypass")) {
                     event.isCancelled = true
-                    player.sendMessage("${ChatColor.RED}You do not have permission to interact with this ${ItemUtils.getDefaultName(block.type)}.")
+                    
+                    player.sendError("You do not have permission to interact with this ${ItemUtils.getDefaultName(block.type)}.")
                 }
             }
         }
@@ -111,10 +114,19 @@ object ProtectionModule : PluginModule(), Listener {
                 
                 val owner = Bukkit.getOfflinePlayer(lockedBlock.ownerId)
                 
-                event.player.sendMessage("${ChatColor.YELLOW}${ChatColor.BOLD}Warning:${ChatColor.RESET}${ChatColor.GRAY} You have broken a ${ChatColor.LIGHT_PURPLE}${ItemUtils.getDefaultName(block.type)}${ChatColor.GRAY} locked by ${ChatColor.BLUE}${owner.name}${ChatColor.GRAY}. This incident has been logged & reported.")
+                event.player.sendRichMessage { 
+                    text("Warning:") {
+                        color = NamedTextColor.YELLOW
+                        bold = true
+                    }
+                    text(" You have broken a ") { color = NamedTextColor.GRAY }
+                    text(ItemUtils.getDefaultName(block.type)) { color = NamedTextColor.LIGHT_PURPLE }
+                    text(" locked by ") { color = NamedTextColor.GRAY }
+                    text(owner.name ?: "") { color = NamedTextColor.BLUE }
+                    text(". This incident has been logged & reported.") { color = NamedTextColor.GRAY }
+                }
             }
         }
-        
     }
     
     // endregion

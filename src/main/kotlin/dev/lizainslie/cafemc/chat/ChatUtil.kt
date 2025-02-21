@@ -15,11 +15,11 @@ import org.bukkit.entity.Player
 
 object ChatUtil {
     /**
-     * Broadcast a [block] to all online players excluding those that do not pass the [filter].
+     * Broadcast a message to all online players excluding those that do not pass the [filter].
      *
      * @param sendToDiscord Optionally send the message to Discord as well.
      */
-    fun broadcast(block: ComponentDsl.() -> Unit, sendToDiscord: Boolean = true, filter: (player: Player) -> Boolean = { true }) {
+    fun broadcast(sendToDiscord: Boolean = true, filter: (player: Player) -> Boolean = { true }, block: ComponentDsl.() -> Unit) {
         if(sendToDiscord) broadcastTextToDiscord(component(block).toPlainText())
         
         Bukkit.getServer().onlinePlayers.filter(filter).forEach {
@@ -43,8 +43,8 @@ object ChatUtil {
     fun broadcast(message: String, filter: (player: Player) -> Boolean) = 
         broadcast(message, true, filter)
     
-    fun broadcast(block: ComponentDsl.() -> Unit, filter: (player: Player) -> Boolean) = 
-        broadcast(block, true, filter)
+    fun broadcast(filter: (player: Player) -> Boolean, block: ComponentDsl.() -> Unit) = 
+        broadcast(true, filter, block)
     
     fun broadcastTextToDiscord(message: String) {
         DiscordUtil.sendMessage(DiscordSRV.getPlugin().mainTextChannel, message)
@@ -85,6 +85,9 @@ object ChatUtil {
             text(component(block))
         }
     }
+    
+    fun translateAmpersand(message: String) = 
+        LegacyComponentSerializer.legacyAmpersand().deserialize(message)
     
     fun translateAmpersand(message: Component) = 
         LegacyComponentSerializer.legacyAmpersand().deserialize(message.toPlainText())

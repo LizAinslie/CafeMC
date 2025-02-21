@@ -1,13 +1,12 @@
 package dev.lizainslie.cafemc.teleport
 
 import dev.lizainslie.cafemc.CafeMC
+import dev.lizainslie.cafemc.chat.sendRichError
+import dev.lizainslie.cafemc.chat.sendRichMessage
 import dev.lizainslie.cafemc.core.PluginModule
 import dev.lizainslie.cafemc.teleport.commands.*
-import net.md_5.bungee.api.ChatColor
-import net.md_5.bungee.api.chat.ClickEvent
-import net.md_5.bungee.api.chat.ComponentBuilder
-import net.md_5.bungee.api.chat.HoverEvent
-import net.md_5.bungee.api.chat.hover.content.Text
+import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -22,11 +21,7 @@ object TeleportModule : PluginModule(), Listener {
     init {
         // Register commands
         commands += TpaCommand
-        commands += TpAcceptCommand
-        commands += TpDenyCommand
-        
         commands += HomeCommand
-        
         commands += BackCommand
     }
     
@@ -36,7 +31,6 @@ object TeleportModule : PluginModule(), Listener {
     fun onPlayerTeleport(event: PlayerTeleportEvent) {
         if (event.player.hasPermission("cafe.tpa.back") && event.cause == PlayerTeleportEvent.TeleportCause.COMMAND) {
             val player = event.player
-            val location = event.from
             
             // Check if player is teleporting back already and ignore
             if (player.hasMetadata("teleporting_back")) {
@@ -45,7 +39,7 @@ object TeleportModule : PluginModule(), Listener {
             }
             
             // Save last location
-            player.setLastLocation(location)
+            player.saveLastLocation(event.from)
         }
     }
     
@@ -60,25 +54,74 @@ object TeleportModule : PluginModule(), Listener {
      */
     fun addRequest(sender: Player, target: Player) {
         requests += TpaRequest(sender, target)
-
-        // Send request to target
-        target.spigot().sendMessage(
-            ComponentBuilder(sender.displayName).color(ChatColor.GOLD)
-                .append(" has requested to teleport to you. ").color(ChatColor.GRAY)
-                .append("[Accept]")
-                    .color(ChatColor.GREEN)
-                    .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept ${sender.name}"))
-                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("/tpaccept ${sender.name}")))
-                .append(" or ").color(ChatColor.GRAY)
-                .append("[Deny]")
-                    .color(ChatColor.RED)
-                    .event(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpdeny ${sender.name}"))
-                    .event(HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("/tpdeny ${sender.name}")))
-                .build()
-        )
+        
+        target.sendRichMessage { 
+            text(sender.displayName()) { color = NamedTextColor.GOLD }
+            text(" has requested to teleport to you. ") { color = NamedTextColor.GRAY }
+            text("[Accept]") { 
+                color = NamedTextColor.GREEN
+                events { 
+                    click = ClickEvent.callback {
+                        getRequest(sender, target)?.let { request ->
+                            target.sendRichMessage {
+                                text("Accepted teleport request from ") { color = NamedTextColor.GRAY }
+                                text(request.sender.displayName()) { color = NamedTextColor.GOLD }
+                                text(".") { color = NamedTextColor.GRAY }
+                            }
+                            
+                            sender.sendRichMessage { 
+                                text(target.displayName()) { color = NamedTextColor.GOLD }
+                                text(" has accepted your teleport request, teleporting you there.") { color = NamedTextColor.GRAY }
+                            }
+                            
+                            removeRequest(sender, target)
+                            sender.teleport(target)
+                        } ?: run {
+                            target.sendRichError {
+                                text("Teleport request from ") { color = NamedTextColor.GRAY }
+                                text(sender.displayName()) { color = NamedTextColor.GOLD }
+                                text(" has expired.") { color = NamedTextColor.GRAY }
+                            }
+                        }
+                    }
+                }
+            }
+            text(" or ") { color = NamedTextColor.GRAY }
+            text("[Deny]") { 
+                color = NamedTextColor.RED
+                events { 
+                    click = ClickEvent.callback {
+                        getRequest(sender, target)?.let { request ->
+                            target.sendRichMessage {
+                                text("Denied teleport request from ") { color = NamedTextColor.GRAY }
+                                text(request.sender.displayName()) { color = NamedTextColor.GOLD }
+                                text(".") { color = NamedTextColor.GRAY }
+                            }
+                            
+                            sender.sendRichMessage { 
+                                text(target.displayName()) { color = NamedTextColor.GOLD }
+                                text(" has denied your teleport request.") { color = NamedTextColor.GRAY }
+                            }
+                            
+                            removeRequest(sender, target)
+                        } ?: run {
+                            target.sendRichError {
+                                text("Teleport request from ") { color = NamedTextColor.GRAY }
+                                text(sender.displayName()) { color = NamedTextColor.GOLD }
+                                text(" has expired.") { color = NamedTextColor.GRAY }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         // Send confirmation to sender
-        sender.sendMessage("${ChatColor.GRAY}Sent a teleport request to ${ChatColor.GOLD}${target.displayName}${ChatColor.GRAY}.")
+        sender.sendRichMessage { 
+            text("Sent a teleport request to ") { color = NamedTextColor.GRAY }
+            text(target.displayName()) { color = NamedTextColor.GOLD }
+            text(".") { color = NamedTextColor.GRAY }
+        }
 
         Bukkit.getScheduler().runTaskAsynchronously(CafeMC.instance) { _ ->
             Thread.sleep(REQUEST_TIMEOUT)
@@ -86,7 +129,11 @@ object TeleportModule : PluginModule(), Listener {
             // Check if request still exists & remove it then notify sender that it expired
             if (getRequest(sender, target) != null) {
                 removeRequest(sender, target)
-                sender.sendMessage("${ChatColor.GRAY}Teleport request to ${ChatColor.GOLD}${target.displayName}${ChatColor.GRAY} has expired.")
+                sender.sendRichMessage { 
+                    text("Teleport request to ") { color = NamedTextColor.GRAY }
+                    text(target.displayName()) { color = NamedTextColor.GOLD }
+                    text(" has expired.") { color = NamedTextColor.GRAY }
+                }
             }
         }
     }

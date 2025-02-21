@@ -1,12 +1,13 @@
 package dev.lizainslie.cafemc.teleport.commands
 
+import dev.lizainslie.cafemc.chat.sendRichMessage
 import dev.lizainslie.cafemc.core.cmd.AllowedSender
 import dev.lizainslie.cafemc.core.cmd.CommandContext
 import dev.lizainslie.cafemc.core.cmd.PluginCommand
 import dev.lizainslie.cafemc.data.location.SavedLocation
 import dev.lizainslie.cafemc.data.player.PlayerSettings
-import dev.lizainslie.cafemc.teleport.setLastLocation
-import org.bukkit.ChatColor
+import dev.lizainslie.cafemc.teleport.saveLastLocation
+import net.kyori.adventure.text.format.NamedTextColor
 import org.jetbrains.exposed.sql.transactions.transaction
 
 internal val SUBCOMMANDS = listOf("set", "clear")
@@ -31,12 +32,12 @@ object HomeCommand : PluginCommand(
                     return@transaction
                 }
                 
-                if (player.hasPermission("cafe.tpa.back")) {
-                    player.setLastLocation(player.location)
-                }
-
+                player.saveLastLocation()
+                
                 player.teleport(home.location)
-                player.sendMessage("${ChatColor.GRAY}Teleported to your home.")
+                player.sendRichMessage {
+                    text("Teleported to your home.") { color = NamedTextColor.GRAY }
+                }
                 return@transaction
             }
             
@@ -48,7 +49,9 @@ object HomeCommand : PluginCommand(
                     }
                     
                     settings.home = SavedLocation.findOrCreate(player.location)
-                    player.sendMessage("${ChatColor.GRAY}Home set.")
+                    player.sendRichMessage {
+                        text("Home set.") { color = NamedTextColor.GRAY }
+                    }
                 }
 
                 "clear" -> {
@@ -60,7 +63,9 @@ object HomeCommand : PluginCommand(
                     settings.home!!.delete()
                     settings.home = null
 
-                    player.sendMessage("${ChatColor.GRAY}Home cleared.")
+                    player.sendRichMessage {
+                        text("Home cleared.") { color = NamedTextColor.GRAY }
+                    }
                 }
 
                 else -> sendError("Invalid subcommand ${args[0]}.")

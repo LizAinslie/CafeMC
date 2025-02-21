@@ -31,7 +31,7 @@ object GiveItemCommand : PluginCommand(
         val itemText = Component
             .text("${amount}x", NamedTextColor.BLUE)
             .appendSpace()
-            .append(Component.text(item.name))
+            .append(item.name)
         
         if (target == player) player.sendMessage(Component
             .text("Gave you ")

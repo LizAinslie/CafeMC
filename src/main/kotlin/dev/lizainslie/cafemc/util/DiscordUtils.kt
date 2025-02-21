@@ -104,7 +104,7 @@ class EmbedBuilderDsl {
 }
 
 @Suppress("unused")
-internal fun dslExample() {
+private fun dslExample() {
     val messageEmbed = DiscordUtils.buildEmbed {
         // some basic embed properties
         title = "Title"
@@ -120,7 +120,7 @@ internal fun dslExample() {
         color(Color.RED) // or a java.awt.Color
         
         
-        author {// you can add an author with a block
+        author { // you can add an author with a block
             name = "Author"
             url = "https://example.com/author"
             iconUrl = "https://example.com/icon.png"

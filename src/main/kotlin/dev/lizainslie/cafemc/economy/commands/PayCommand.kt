@@ -10,7 +10,6 @@ import dev.lizainslie.cafemc.economy.data.PlayerTransaction
 import dev.lizainslie.cafemc.util.AccountUtils
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object PayCommand : PluginCommand(

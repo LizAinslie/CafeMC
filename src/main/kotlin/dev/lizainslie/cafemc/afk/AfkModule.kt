@@ -3,17 +3,19 @@ package dev.lizainslie.cafemc.afk
 import dev.lizainslie.cafemc.CafeMC
 import dev.lizainslie.cafemc.afk.commands.AfkCommand
 import dev.lizainslie.cafemc.chat.ChatUtil
+import dev.lizainslie.cafemc.chat.sendRichMessage
+import dev.lizainslie.cafemc.chat.toPlainText
 import dev.lizainslie.cafemc.core.PluginModule
-import github.scarsz.discordsrv.dependencies.jda.api.EmbedBuilder
 import me.neznamy.tab.api.TabAPI
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import org.bukkit.scheduler.BukkitTask
 
 object AfkModule : PluginModule(), Listener {
     private val afkMap = mutableMapOf<Player, Boolean>()
@@ -78,26 +80,32 @@ object AfkModule : PluginModule(), Listener {
     
     // region Private API
     
+    private fun nowOrNoLonger(newAfkStatus: Boolean) = if (newAfkStatus) "now" else "no longer"
+    
     /**
      * Notify [player] of their [newAfkStatus]
      */
     private fun notifyAfk(player: Player, newAfkStatus: Boolean) {
-        player.sendMessage("${ChatColor.GRAY}You are ${if (newAfkStatus) "now" else "no longer"} AFK.")
+//        player.sendMessage("${ChatColor.GRAY}You are ${if (newAfkStatus) "now" else "no longer"} AFK.")
+        player.sendRichMessage { 
+            text("You are ${nowOrNoLonger(newAfkStatus)} AFK.") { color = NamedTextColor.GRAY }
+        }
     }
     
     /**
      * Broadcast a message to all players of the [newAfkStatus] of [player] 
      */
     private fun announceAfk(player: Player, newAfkStatus: Boolean, playerFilter: (Player) -> Boolean = { it != player }) {
-        ChatUtil.broadcast(
-            "${ChatColor.GOLD}${player.displayName}${ChatColor.GRAY} is ${if (newAfkStatus) "now" else "no longer"} AFK.",
-            false,
-            playerFilter
-        )
+        ChatUtil.broadcast(false, playerFilter) {
+            text(player.displayName()) { color = NamedTextColor.GOLD }
+            text(" is ") { color = NamedTextColor.GRAY }
+            text(nowOrNoLonger(newAfkStatus)) { color = NamedTextColor.GRAY }
+            text(" AFK.") { color = NamedTextColor.GRAY }
+        }
         
         ChatUtil.broadcastEmbedToDiscord {
             author {
-                name = "${player.displayName} is ${if (newAfkStatus) "now" else "no longer"} AFK."
+                name = "${player.displayName().toPlainText()} is ${nowOrNoLonger(newAfkStatus)} AFK."
                 iconUrl = "https://api.mineatar.io/face/${player.uniqueId}"
             }
         }
@@ -110,7 +118,10 @@ object AfkModule : PluginModule(), Listener {
         // Update Tab List
         val tab = TabAPI.getInstance()
         val tabPlayer = tab.getPlayer(player.uniqueId) ?: return
-        (tab.tabListFormatManager ?: return).setPrefix(tabPlayer, if (newAfkStatus) "${ChatColor.GRAY}[AFK]${ChatColor.RESET} " else null)
+        
+        val prefix = if (newAfkStatus) Component.text("[AFK]").color(NamedTextColor.GRAY) else null
+        
+        (tab.tabListFormatManager ?: return).setPrefix(tabPlayer, prefix?.let { LegacyComponentSerializer.legacySection().serialize(prefix) })
     }
     
     /**
