@@ -5,8 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 object ItemUtils {
-    fun getDefaultName(type: Material) = ItemStack(type).itemMeta?.displayName 
-        ?: TextUtils.capitalizeEnumConstant(type.name)
+    fun getDefaultName(type: Material) = ItemStack(type).effectiveName()
     
 }
 

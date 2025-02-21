@@ -20,7 +20,7 @@ abstract class CustomItemBase(
     val canPlace: Boolean = true,
 ) {
 
-    var name: Component = Component.text(ItemUtils.getDefaultName(material))
+    var name: Component = ItemUtils.getDefaultName(material)
     val lore = mutableListOf<Component>()
     
     fun name(block: ComponentDsl.() -> Unit) {

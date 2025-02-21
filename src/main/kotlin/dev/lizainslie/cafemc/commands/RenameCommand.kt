@@ -24,7 +24,7 @@ object RenameCommand : PluginCommand(
         val item = player.inventory.itemInMainHand
         val meta = item.itemMeta ?: return
 
-        val defaultName = Component.text(ItemUtils.getDefaultName(item.type))
+        val defaultName = ItemUtils.getDefaultName(item.type)
         val displayName =
             if (args.isEmpty()) defaultName
             else ChatUtil.translateAmpersand(args.joinToString(" "))
