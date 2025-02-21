@@ -11,6 +11,7 @@ import dev.lizainslie.cafemc.data.commands.MigrateCommand
 import dev.lizainslie.cafemc.data.migrate
 import dev.lizainslie.cafemc.economy.EconomyModule
 import dev.lizainslie.cafemc.item.CustomItemsModule
+import dev.lizainslie.cafemc.protect.ProtectionModule
 import dev.lizainslie.cafemc.slime.SlimeFinderModule
 import dev.lizainslie.cafemc.teleport.TeleportModule
 import org.bukkit.Bukkit
@@ -31,6 +32,7 @@ class CafeMC : JavaPlugin() {
         TeleportModule,
         AfkModule,
         SlimeFinderModule,
+        ProtectionModule,
         CustomItemsModule,
         EconomyModule,
     )
