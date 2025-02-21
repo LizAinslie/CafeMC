@@ -160,7 +160,7 @@ bukkitPluginYaml {
             description = "Audit all logged incidents"
         }
 
-        register("cafe.elytra.admin") {
+        register("cafe.elytra") {
             description = "Toggle someones Elytra"
         }
     }
