@@ -159,6 +159,10 @@ bukkitPluginYaml {
         register("cafe.audit.admin") {
             description = "Audit all logged incidents"
         }
+
+        register("cafe.elytra") {
+            description = "Toggle someones Elytra"
+        }
     }
     
     commands {
@@ -248,6 +252,11 @@ bukkitPluginYaml {
         register("testcomponent") {
             description = "Test the component system"
             usage = "/<command> [runcommandtest]"
+        }
+
+        register("elytra") {
+            description = "Toggle someones Elytra"
+            usage = "/<command> <player>"
         }
     }
 }
