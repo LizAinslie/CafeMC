@@ -6,7 +6,6 @@ import dev.lizainslie.cafemc.core.cmd.PluginCommand
 
 object AfkCommand : PluginCommand(
     command = "afk",
-    description = "Toggle AFK status",
     permission = "cafe.afk",
 ) {
     override fun CommandContext.onCommand() {

@@ -7,7 +7,6 @@ import dev.lizainslie.cafemc.data.migrate
 
 object MigrateCommand : PluginCommand(
     command = "migrate",
-    description = "Migrate plugin database changes",
     allowedSender = AllowedSender.CONSOLE,
 ) {
     override fun CommandContext.onCommand() {

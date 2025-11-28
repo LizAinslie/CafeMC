@@ -3,6 +3,7 @@ package dev.lizainslie.cafemc.afk
 import dev.lizainslie.cafemc.CafeMC
 import dev.lizainslie.cafemc.afk.commands.AfkCommand
 import dev.lizainslie.cafemc.chat.ChatUtil
+import dev.lizainslie.cafemc.chat.nicknameOrDisplayName
 import dev.lizainslie.cafemc.chat.sendRichMessage
 import dev.lizainslie.cafemc.chat.toPlainText
 import dev.lizainslie.cafemc.core.PluginModule
@@ -97,7 +98,7 @@ object AfkModule : PluginModule(), Listener {
      */
     private fun announceAfk(player: Player, newAfkStatus: Boolean, playerFilter: (Player) -> Boolean = { it != player }) {
         ChatUtil.broadcast(false, playerFilter) {
-            text(player.displayName()) { color = NamedTextColor.GOLD }
+            text(player.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
             text(" is ") { color = NamedTextColor.GRAY }
             text(nowOrNoLonger(newAfkStatus)) { color = NamedTextColor.GRAY }
             text(" AFK.") { color = NamedTextColor.GRAY }

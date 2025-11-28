@@ -7,11 +7,10 @@ import org.bukkit.Bukkit
 
 object ElytraCommand : PluginCommand(
     command = "elytra",
-    description = "Toggle someones Elytra",
+    usage = "<player>",
+    permission = "cafe.elytra",
     minArgs = 1,
     maxArgs = 1,
-    permission = "cafe.elytra",
-    usage = "<player>",
     ) {
     override fun CommandContext.onCommand() {
         val targetPlayer = Bukkit.getPlayer(args[0])

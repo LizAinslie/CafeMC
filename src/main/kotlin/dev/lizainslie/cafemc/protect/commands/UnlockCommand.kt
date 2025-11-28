@@ -7,14 +7,12 @@ import dev.lizainslie.cafemc.core.cmd.PluginCommand
 import dev.lizainslie.cafemc.protect.data.LockedBlock
 import dev.lizainslie.cafemc.util.ItemUtils
 import net.kyori.adventure.text.format.NamedTextColor
-import org.bukkit.ChatColor
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object UnlockCommand : PluginCommand(
     command = "unlock",
-    description = "Unlock a locked block",
-    allowedSender = AllowedSender.PLAYER,
     permission = "cafe.lock",
+    allowedSender = AllowedSender.PLAYER,
 ) {
     override fun CommandContext.onCommand() {
         withLookingAt("Look at a block to unlock it") { block ->

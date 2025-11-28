@@ -13,9 +13,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object LockCommand : PluginCommand(
     command = "lock",
-    description = "Lock a block",
-    allowedSender = AllowedSender.PLAYER,
     permission = "cafe.lock",
+    allowedSender = AllowedSender.PLAYER,
 ) {
     override fun CommandContext.onCommand() {
         player.getTargetBlockExact(5)?.let { block ->

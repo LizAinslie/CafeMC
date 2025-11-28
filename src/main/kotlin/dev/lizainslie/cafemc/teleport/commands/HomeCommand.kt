@@ -14,12 +14,10 @@ internal val SUBCOMMANDS = listOf("set", "clear")
 
 object HomeCommand : PluginCommand(
     command = "home",
-    description = "Teleport to your home",
     usage = "/home [${SUBCOMMANDS.joinToString("|")}]",
-    allowedSender = AllowedSender.PLAYER,
-    minArgs = 0,
-    maxArgs = 1,
     permission = "cafe.home",
+    maxArgs = 1,
+    allowedSender = AllowedSender.PLAYER,
 ) {
     override fun CommandContext.onCommand() {
         transaction {

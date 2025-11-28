@@ -8,12 +8,11 @@ import org.bukkit.Bukkit
 
 object TpaCommand : PluginCommand(
     command = "tpa",
-    description = "Request to teleport to a player",
     usage = "<player>",
-    allowedSender = AllowedSender.PLAYER,
+    permission = "cafe.tpa.use",
     minArgs = 1,
     maxArgs = 1,
-    permission = "cafe.tpa.use",
+    allowedSender = AllowedSender.PLAYER,
 ) {
     override fun CommandContext.onCommand() {
         val target = Bukkit.getPlayer(args[0])

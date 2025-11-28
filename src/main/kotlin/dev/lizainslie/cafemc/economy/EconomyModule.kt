@@ -3,6 +3,7 @@ package dev.lizainslie.cafemc.economy
 import dev.lizainslie.cafemc.CafeMC
 import dev.lizainslie.cafemc.chat.TableDsl
 import dev.lizainslie.cafemc.chat.component
+import dev.lizainslie.cafemc.chat.nicknameOrDisplayName
 import dev.lizainslie.cafemc.chat.sendRichMessage
 import dev.lizainslie.cafemc.chat.table
 import dev.lizainslie.cafemc.core.PluginModule
@@ -18,6 +19,7 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -54,11 +56,19 @@ object EconomyModule : PluginModule(), Listener {
 
     // region Public API
     
-    fun getNotificationMessage(amount: Double, senderName: String) = component {
+    fun getNotificationMessage(amount: Double, sender: OfflinePlayer) = component {
         text("You have received ") { color = NamedTextColor.GRAY }
         text(CafeEconomy.format(amount)) { color = NamedTextColor.GREEN }
         text(" from ") { color = NamedTextColor.GRAY }
-        text(senderName) { color = NamedTextColor.GOLD }
+        text(sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
+        text(".") { color = NamedTextColor.GRAY }
+    }
+
+    fun getNotificationMessage(amount: Double, sender: Player) = component {
+        text("You have received ") { color = NamedTextColor.GRAY }
+        text(CafeEconomy.format(amount)) { color = NamedTextColor.GREEN }
+        text(" from ") { color = NamedTextColor.GRAY }
+        text(sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
         text(".") { color = NamedTextColor.GRAY }
     }
     
@@ -157,7 +167,7 @@ object EconomyModule : PluginModule(), Listener {
                 val recipient = Bukkit.getPlayer(transaction.recipientId) ?: return@forEach
                 val sender = Bukkit.getOfflinePlayer(transaction.senderId)
 
-                recipient.sendMessage(getNotificationMessage(transaction.amount, sender.name!!))
+                recipient.sendMessage(getNotificationMessage(transaction.amount, sender))
                 transaction.notified = true
             }
         }

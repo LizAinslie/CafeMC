@@ -1,6 +1,5 @@
 package dev.lizainslie.cafemc.economy.data
 
-import org.bukkit.entity.Player
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

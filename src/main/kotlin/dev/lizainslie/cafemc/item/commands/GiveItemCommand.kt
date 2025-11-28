@@ -5,16 +5,14 @@ import dev.lizainslie.cafemc.core.cmd.PluginCommand
 import dev.lizainslie.cafemc.item.CustomItemsModule
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import net.minecraft.ChatFormatting
 import org.bukkit.Bukkit
 
 object GiveItemCommand : PluginCommand(
     command = "giveitem",
-    description = "Give a custom item to a player",
     usage = "<item> [amount] [player]",
+    permission = "cafe.giveitem",
     minArgs = 1,
     maxArgs = 3,
-    permission = "cafe.giveitem",
 ) {
     override fun CommandContext.onCommand() {
         val itemId = args[0]

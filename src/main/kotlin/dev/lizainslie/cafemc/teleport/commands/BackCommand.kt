@@ -7,10 +7,9 @@ import dev.lizainslie.cafemc.teleport.goToLastLocation
 
 object BackCommand : PluginCommand(
     command = "back",
-    description = "Teleport to your previous location",
     usage = "/back",
-    allowedSender = AllowedSender.PLAYER,
     permission = "cafe.tpa.back",
+    allowedSender = AllowedSender.PLAYER,
 ) {
     override fun CommandContext.onCommand() {
         player.goToLastLocation()

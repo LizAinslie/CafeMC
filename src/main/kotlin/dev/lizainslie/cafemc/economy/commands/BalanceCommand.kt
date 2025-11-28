@@ -12,13 +12,11 @@ import org.bukkit.OfflinePlayer
 
 object BalanceCommand : PluginCommand(
     command = "balance",
-    description = "Check your balance or that of another player",
-    aliases = listOf("bal"),
     usage = "[user]",
-    allowedSender = AllowedSender.PLAYER,
-    minArgs = 0,
-    maxArgs = 1,
     permission = "cafe.balance",
+    aliases = listOf("bal"),
+    maxArgs = 1,
+    allowedSender = AllowedSender.PLAYER,
 ) {
     override fun CommandContext.onCommand() {
         var target: OfflinePlayer = player

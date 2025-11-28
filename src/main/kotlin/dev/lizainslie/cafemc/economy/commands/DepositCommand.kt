@@ -9,11 +9,9 @@ import dev.lizainslie.cafemc.economy.EconomyModule
 import dev.lizainslie.cafemc.util.ItemMaps
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextColor
 
 object DepositCommand : PluginCommand(
     command = "deposit",
-    description = "Deposit your valuables as money into your account",
     permission = "cafe.deposit",
     allowedSender = AllowedSender.PLAYER,
 ) {

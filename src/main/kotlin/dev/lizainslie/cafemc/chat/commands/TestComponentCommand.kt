@@ -15,10 +15,8 @@ import org.bukkit.inventory.ItemStack
 
 object TestComponentCommand : PluginCommand(
     command = "testcomponent",
-    description = "Test the component system",
-    allowedSender = AllowedSender.PLAYER,
-    minArgs = 0,
     maxArgs = 1,
+    allowedSender = AllowedSender.PLAYER,
 
 ) {
     override fun CommandContext.onCommand() {

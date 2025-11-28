@@ -66,7 +66,7 @@ dependencies {
     implementation("com.zaxxer:HikariCP:6.2.1") // connection pooling
     
     // integration
-    compileOnly("com.github.NEZNAMY:TAB-API:5.0.4")
+    compileOnly("com.github.NEZNAMY:TAB-API:5.3.2")
     compileOnly("com.discordsrv:discordsrv:1.28.0")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     
@@ -163,6 +163,10 @@ bukkitPluginYaml {
         register("cafe.elytra") {
             description = "Toggle someones Elytra"
         }
+
+        register("cafe.nickname") {
+            description = "Set your nickname"
+        }
     }
     
     commands {
@@ -252,6 +256,13 @@ bukkitPluginYaml {
         register("testcomponent") {
             description = "Test the component system"
             usage = "/<command> [runcommandtest]"
+        }
+
+        register("nickname") {
+            description = "Set or reset your nickname"
+            permission = "cafe.nickname"
+            usage = "/<command> [nickname]"
+            aliases = listOf("nick")
         }
 
         register("elytra") {

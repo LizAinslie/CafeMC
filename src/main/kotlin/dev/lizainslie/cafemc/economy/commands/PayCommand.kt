@@ -1,5 +1,6 @@
 package dev.lizainslie.cafemc.economy.commands
 
+import dev.lizainslie.cafemc.chat.nicknameOrDisplayName
 import dev.lizainslie.cafemc.chat.sendRichMessage
 import dev.lizainslie.cafemc.core.cmd.AllowedSender
 import dev.lizainslie.cafemc.core.cmd.CommandContext
@@ -14,12 +15,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object PayCommand : PluginCommand(
     command = "pay",
-    description = "Pay another player",
     usage = "<player> <amount>",
-    allowedSender = AllowedSender.PLAYER,
+    permission = "cafe.pay",
     minArgs = 2,
     maxArgs = 2,
-    permission = "cafe.pay",
+    allowedSender = AllowedSender.PLAYER,
 ) {
     override fun CommandContext.onCommand() {
         val target = AccountUtils.getUuidForAccountName(args[0])?.let { Bukkit.getOfflinePlayer(it) }
@@ -44,7 +44,7 @@ object PayCommand : PluginCommand(
 
         player.sendRichMessage { 
             text("You paid ") { color = NamedTextColor.GRAY }
-            text(target.name.toString()) { color = NamedTextColor.BLUE }
+            text(target.nicknameOrDisplayName()) { color = NamedTextColor.BLUE }
             space()
             text(formattedAmount) { color = NamedTextColor.GOLD }
             text(".") { color = NamedTextColor.GRAY }
@@ -55,7 +55,7 @@ object PayCommand : PluginCommand(
         var notified = false
         
         if (targetPlayer != null) {
-            targetPlayer.sendMessage(EconomyModule.getNotificationMessage(amount, player.name))
+            targetPlayer.sendMessage(EconomyModule.getNotificationMessage(amount, player))
             notified = true
         }
         

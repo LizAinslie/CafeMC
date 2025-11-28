@@ -1,6 +1,7 @@
 package dev.lizainslie.cafemc.chat
 
 import dev.lizainslie.cafemc.afk.AfkModule
+import dev.lizainslie.cafemc.chat.commands.NicknameCommand
 import dev.lizainslie.cafemc.chat.commands.TestComponentCommand
 import dev.lizainslie.cafemc.core.PluginModule
 import io.papermc.paper.event.player.AsyncChatEvent
@@ -15,6 +16,7 @@ object ChatModule : PluginModule(), Listener {
     
     init {
         commands += TestComponentCommand
+        commands += NicknameCommand
     }
     
     // region Event Handlers
@@ -29,7 +31,7 @@ object ChatModule : PluginModule(), Listener {
             
             text(" ")
             
-            text(event.player.displayName()) {
+            text(event.player.nicknameOrDisplayName()) {
                 color = NamedTextColor.GRAY
             }
         })
@@ -45,7 +47,7 @@ object ChatModule : PluginModule(), Listener {
             
             text(" ")
             
-            text(event.player.displayName()) {
+            text(event.player.nicknameOrDisplayName()) {
                 color = NamedTextColor.GRAY
             }
         })
@@ -53,7 +55,7 @@ object ChatModule : PluginModule(), Listener {
 
     @EventHandler
     fun onPlayerChat(event: AsyncChatEvent) {
-        event.renderer { sender, senderDisplayName, message, viewer ->
+        event.renderer { sender, _, message, _ ->
             component {
                 text("[") {
                     color = NamedTextColor.GRAY
@@ -68,7 +70,7 @@ object ChatModule : PluginModule(), Listener {
                     text(" ")
                 }
 
-                text(senderDisplayName) { color = NamedTextColor.GOLD }
+                text(sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
                 text("] ") { color = NamedTextColor.GRAY }
 
                 text(ChatUtil.translateAmpersand(message))

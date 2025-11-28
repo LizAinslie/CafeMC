@@ -12,14 +12,17 @@ import java.util.UUID
 class PlayerSettings(id: EntityID<UUID>): UUIDEntity(id) {
     companion object : UUIDEntityClass<PlayerSettings>(PlayerSettingsTable) {
         fun findOrCreate(player: Player) = findById(player.uniqueId) ?: new(player.uniqueId) {}
-        fun find(player: Player) = findById(player.uniqueId)
+        fun find(player: Player) = find(player.uniqueId)
+        fun find(uuid: UUID) = findById(uuid)
     }
 
     var home by SavedLocation optionalReferencedOn PlayerSettingsTable.home
     var lastLocation by SavedLocation optionalReferencedOn PlayerSettingsTable.lastLocation
+    var nickname by PlayerSettingsTable.nickname
 }
 
 object PlayerSettingsTable : UUIDTable("player_settings") {
     val home = reference("home", SavedLocationsTable).nullable()
     val lastLocation = reference("last_location", SavedLocationsTable).nullable()
+    val nickname = varchar("nickname", 128).nullable()
 }

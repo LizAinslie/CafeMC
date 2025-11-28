@@ -8,11 +8,10 @@ val ACTIONS = listOf("get", "list", "find")
 
 object AuditCommand : PluginCommand(
     command = "audit",
-    description = "Audit logged incidents",
+    usage = "<incident_type|all> <${ACTIONS.joinToString { "|" }}> [id|param=value] [param=value]...",
     permission = "cafe.admin",
     minArgs = 2,
     maxArgs = -1,
-    usage = "<incident_type|all> <${ACTIONS.joinToString { "|" }}> [id|param=value] [param=value]...",
 ) {
     
     override fun CommandContext.onCommand() {

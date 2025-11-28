@@ -2,6 +2,7 @@ package dev.lizainslie.cafemc.protect
 
 import dev.lizainslie.cafemc.CafeMC
 import dev.lizainslie.cafemc.auditing.AuditModule
+import dev.lizainslie.cafemc.chat.nicknameOrDisplayName
 import dev.lizainslie.cafemc.chat.sendError
 import dev.lizainslie.cafemc.chat.sendRichMessage
 import dev.lizainslie.cafemc.core.PluginModule
@@ -122,7 +123,7 @@ object ProtectionModule : PluginModule(), Listener {
                     text(" You have broken a ") { color = NamedTextColor.GRAY }
                     text(ItemUtils.getDefaultName(block.type)) { color = NamedTextColor.LIGHT_PURPLE }
                     text(" locked by ") { color = NamedTextColor.GRAY }
-                    text(owner.name ?: "") { color = NamedTextColor.BLUE }
+                    text(owner.nicknameOrDisplayName()) { color = NamedTextColor.BLUE }
                     text(". This incident has been logged & reported.") { color = NamedTextColor.GRAY }
                 }
             }

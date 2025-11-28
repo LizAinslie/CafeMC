@@ -6,12 +6,11 @@ import dev.lizainslie.cafemc.core.cmd.PluginCommand
 
 object WarpCommand : PluginCommand(
     command = "warp",
-    description = "Teleport to a warp",
     usage = "/warp <name>",
-    allowedSender = AllowedSender.PLAYER,
+    permission = "cafe.warp",
     minArgs = 1,
     maxArgs = 1,
-    permission = "cafe.warp",
+    allowedSender = AllowedSender.PLAYER,
 ) {
     override fun CommandContext.onCommand() {
         val warpName = args[0]

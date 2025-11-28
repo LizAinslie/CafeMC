@@ -6,18 +6,16 @@ import dev.lizainslie.cafemc.util.ItemUtils
 import dev.lizainslie.cafemc.core.cmd.AllowedSender
 import dev.lizainslie.cafemc.core.cmd.CommandContext
 import dev.lizainslie.cafemc.core.cmd.PluginCommand
-import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.entity.Player
 
 object RenameCommand : PluginCommand(
     command = "rename",
-    description = "Rename the item in your hand",
     usage = "<name>",
-    allowedSender = AllowedSender.PLAYER,
+    permission = "cafe.rename",
     minArgs = 1,
     maxArgs = -1,
-    permission = "cafe.rename",
+    allowedSender = AllowedSender.PLAYER,
 ) {
     override fun CommandContext.onCommand() {
         val player = sender as Player
@@ -29,10 +27,9 @@ object RenameCommand : PluginCommand(
             if (args.isEmpty()) defaultName
             else ChatUtil.translateAmpersand(args.joinToString(" "))
 
-        meta.displayName(displayName)
+        meta.itemName(displayName)
         item.itemMeta = meta
 
-//        player.sendMessage("${ChatColor.GRAY}Your ${ChatColor.AQUA}$defaultName${ChatColor.GRAY} has been renamed to $displayName.")
         player.sendRichMessage { 
             text("Your ") { color = NamedTextColor.GRAY }
             text(defaultName) { color = NamedTextColor.AQUA }

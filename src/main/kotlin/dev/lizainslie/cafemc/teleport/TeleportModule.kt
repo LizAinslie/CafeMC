@@ -1,6 +1,7 @@
 package dev.lizainslie.cafemc.teleport
 
 import dev.lizainslie.cafemc.CafeMC
+import dev.lizainslie.cafemc.chat.nicknameOrDisplayName
 import dev.lizainslie.cafemc.chat.sendRichError
 import dev.lizainslie.cafemc.chat.sendRichMessage
 import dev.lizainslie.cafemc.core.PluginModule
@@ -56,7 +57,7 @@ object TeleportModule : PluginModule(), Listener {
         requests += TpaRequest(sender, target)
         
         target.sendRichMessage { 
-            text(sender.displayName()) { color = NamedTextColor.GOLD }
+            text(sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
             text(" has requested to teleport to you. ") { color = NamedTextColor.GRAY }
             text("[Accept]") { 
                 color = NamedTextColor.GREEN
@@ -65,12 +66,12 @@ object TeleportModule : PluginModule(), Listener {
                         getRequest(sender, target)?.let { request ->
                             target.sendRichMessage {
                                 text("Accepted teleport request from ") { color = NamedTextColor.GRAY }
-                                text(request.sender.displayName()) { color = NamedTextColor.GOLD }
+                                text(request.sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
                                 text(".") { color = NamedTextColor.GRAY }
                             }
                             
                             sender.sendRichMessage { 
-                                text(target.displayName()) { color = NamedTextColor.GOLD }
+                                text(target.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
                                 text(" has accepted your teleport request, teleporting you there.") { color = NamedTextColor.GRAY }
                             }
                             
@@ -79,7 +80,7 @@ object TeleportModule : PluginModule(), Listener {
                         } ?: run {
                             target.sendRichError {
                                 text("Teleport request from ") { color = NamedTextColor.GRAY }
-                                text(sender.displayName()) { color = NamedTextColor.GOLD }
+                                text(sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
                                 text(" has expired.") { color = NamedTextColor.GRAY }
                             }
                         }
@@ -94,12 +95,12 @@ object TeleportModule : PluginModule(), Listener {
                         getRequest(sender, target)?.let { request ->
                             target.sendRichMessage {
                                 text("Denied teleport request from ") { color = NamedTextColor.GRAY }
-                                text(request.sender.displayName()) { color = NamedTextColor.GOLD }
+                                text(request.sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
                                 text(".") { color = NamedTextColor.GRAY }
                             }
                             
                             sender.sendRichMessage { 
-                                text(target.displayName()) { color = NamedTextColor.GOLD }
+                                text(target.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
                                 text(" has denied your teleport request.") { color = NamedTextColor.GRAY }
                             }
                             
@@ -107,7 +108,7 @@ object TeleportModule : PluginModule(), Listener {
                         } ?: run {
                             target.sendRichError {
                                 text("Teleport request from ") { color = NamedTextColor.GRAY }
-                                text(sender.displayName()) { color = NamedTextColor.GOLD }
+                                text(sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
                                 text(" has expired.") { color = NamedTextColor.GRAY }
                             }
                         }
@@ -119,7 +120,7 @@ object TeleportModule : PluginModule(), Listener {
         // Send confirmation to sender
         sender.sendRichMessage { 
             text("Sent a teleport request to ") { color = NamedTextColor.GRAY }
-            text(target.displayName()) { color = NamedTextColor.GOLD }
+            text(target.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
             text(".") { color = NamedTextColor.GRAY }
         }
 
@@ -131,7 +132,7 @@ object TeleportModule : PluginModule(), Listener {
                 removeRequest(sender, target)
                 sender.sendRichMessage { 
                     text("Teleport request to ") { color = NamedTextColor.GRAY }
-                    text(target.displayName()) { color = NamedTextColor.GOLD }
+                    text(target.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
                     text(" has expired.") { color = NamedTextColor.GRAY }
                 }
             }

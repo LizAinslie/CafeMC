@@ -9,7 +9,6 @@ import org.bukkit.entity.Player
 
 abstract class PluginCommand(
     val command: String,
-    val description: String,
     val usage: String = "",
     val permission: String? = null,
     val aliases: List<String> = emptyList(),
