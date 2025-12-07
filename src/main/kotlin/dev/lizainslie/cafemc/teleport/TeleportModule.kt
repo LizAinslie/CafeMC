@@ -66,12 +66,12 @@ object TeleportModule : PluginModule(), Listener {
                         getRequest(sender, target)?.let { request ->
                             target.sendRichMessage {
                                 text("Accepted teleport request from ") { color = NamedTextColor.GRAY }
-                                text(request.sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
+                                component(request.sender.nicknameOrDisplayName())
                                 text(".") { color = NamedTextColor.GRAY }
                             }
                             
                             sender.sendRichMessage { 
-                                text(target.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
+                                component(target.nicknameOrDisplayName())
                                 text(" has accepted your teleport request, teleporting you there.") { color = NamedTextColor.GRAY }
                             }
                             
@@ -80,7 +80,7 @@ object TeleportModule : PluginModule(), Listener {
                         } ?: run {
                             target.sendRichError {
                                 text("Teleport request from ") { color = NamedTextColor.GRAY }
-                                text(sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
+                                component(sender.nicknameOrDisplayName())
                                 text(" has expired.") { color = NamedTextColor.GRAY }
                             }
                         }
@@ -95,12 +95,12 @@ object TeleportModule : PluginModule(), Listener {
                         getRequest(sender, target)?.let { request ->
                             target.sendRichMessage {
                                 text("Denied teleport request from ") { color = NamedTextColor.GRAY }
-                                text(request.sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
+                                component(request.sender.nicknameOrDisplayName())
                                 text(".") { color = NamedTextColor.GRAY }
                             }
                             
                             sender.sendRichMessage { 
-                                text(target.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
+                                component(target.nicknameOrDisplayName())
                                 text(" has denied your teleport request.") { color = NamedTextColor.GRAY }
                             }
                             
@@ -108,7 +108,7 @@ object TeleportModule : PluginModule(), Listener {
                         } ?: run {
                             target.sendRichError {
                                 text("Teleport request from ") { color = NamedTextColor.GRAY }
-                                text(sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
+                                component(sender.nicknameOrDisplayName())
                                 text(" has expired.") { color = NamedTextColor.GRAY }
                             }
                         }
@@ -120,7 +120,7 @@ object TeleportModule : PluginModule(), Listener {
         // Send confirmation to sender
         sender.sendRichMessage { 
             text("Sent a teleport request to ") { color = NamedTextColor.GRAY }
-            text(target.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
+            component(target.nicknameOrDisplayName())
             text(".") { color = NamedTextColor.GRAY }
         }
 
@@ -132,7 +132,7 @@ object TeleportModule : PluginModule(), Listener {
                 removeRequest(sender, target)
                 sender.sendRichMessage { 
                     text("Teleport request to ") { color = NamedTextColor.GRAY }
-                    text(target.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
+                    component(target.nicknameOrDisplayName())
                     text(" has expired.") { color = NamedTextColor.GRAY }
                 }
             }

@@ -5,15 +5,16 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
 
-        repositories {
-            maven {
-                name = "localPlugins"
-                url = uri("${System.getProperty("user.home")}/.gradle_plugins")
-            }
-        }
-        
-//        mavenLocal()
         maven("https://repo.papermc.io/repository/maven-public/")
+
+//        repositories {
+//            maven {
+//                name = "localPlugins"
+//                url = uri("${System.getProperty("user.home")}/.gradle_plugins")
+//            }
+//        }
+
+//        mavenLocal()
     }
 }
 plugins {

@@ -1,6 +1,7 @@
 package dev.lizainslie.cafemc.commands
 
 import dev.lizainslie.cafemc.chat.ChatUtil
+import dev.lizainslie.cafemc.chat.component
 import dev.lizainslie.cafemc.chat.sendRichMessage
 import dev.lizainslie.cafemc.util.ItemUtils
 import dev.lizainslie.cafemc.core.cmd.AllowedSender
@@ -25,16 +26,16 @@ object RenameCommand : PluginCommand(
         val defaultName = ItemUtils.getDefaultName(item.type)
         val displayName =
             if (args.isEmpty()) defaultName
-            else ChatUtil.translateAmpersand(args.joinToString(" "))
+            else ChatUtil.translateAmpersand("&r" + args.joinToString(" "))
 
-        meta.itemName(displayName)
+        meta.customName(displayName)
         item.itemMeta = meta
 
         player.sendRichMessage { 
             text("Your ") { color = NamedTextColor.GRAY }
             text(defaultName) { color = NamedTextColor.AQUA }
             text(" has been renamed to ") { color = NamedTextColor.GRAY }
-            text(displayName)
+            component(displayName)
             text(".") { color = NamedTextColor.GRAY }
         }
     }

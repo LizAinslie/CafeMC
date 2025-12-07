@@ -31,9 +31,7 @@ object ChatModule : PluginModule(), Listener {
             
             text(" ")
             
-            text(event.player.nicknameOrDisplayName()) {
-                color = NamedTextColor.GRAY
-            }
+            component(event.player.nicknameOrDisplayName(NamedTextColor.GRAY))
         })
     }
 
@@ -47,9 +45,7 @@ object ChatModule : PluginModule(), Listener {
             
             text(" ")
             
-            text(event.player.nicknameOrDisplayName()) {
-                color = NamedTextColor.GRAY
-            }
+            component(event.player.nicknameOrDisplayName(NamedTextColor.GRAY))
         })
     }
 
@@ -70,10 +66,10 @@ object ChatModule : PluginModule(), Listener {
                     text(" ")
                 }
 
-                text(sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
+                component(sender.nicknameOrDisplayName(NamedTextColor.GOLD))
                 text("] ") { color = NamedTextColor.GRAY }
 
-                text(ChatUtil.translateAmpersand(message))
+                component(ChatUtil.translateAmpersand(message))
             }
         }
     }

@@ -42,9 +42,7 @@ object NicknameCommand : PluginCommand(
                 text("Your nickname has been set to ") {
                     color = NamedTextColor.GRAY
                 }
-                text(ChatUtil.translateAmpersand(nickname)) {
-                    bold = true
-                }
+                component(ChatUtil.translateAmpersand(nickname))
                 text(".") {
                     color = NamedTextColor.GRAY
                 }

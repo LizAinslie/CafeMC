@@ -60,7 +60,7 @@ object EconomyModule : PluginModule(), Listener {
         text("You have received ") { color = NamedTextColor.GRAY }
         text(CafeEconomy.format(amount)) { color = NamedTextColor.GREEN }
         text(" from ") { color = NamedTextColor.GRAY }
-        text(sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
+        component(sender.nicknameOrDisplayName(NamedTextColor.GOLD))
         text(".") { color = NamedTextColor.GRAY }
     }
 
@@ -68,7 +68,7 @@ object EconomyModule : PluginModule(), Listener {
         text("You have received ") { color = NamedTextColor.GRAY }
         text(CafeEconomy.format(amount)) { color = NamedTextColor.GREEN }
         text(" from ") { color = NamedTextColor.GRAY }
-        text(sender.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
+        component(sender.nicknameOrDisplayName(NamedTextColor.GOLD))
         text(".") { color = NamedTextColor.GRAY }
     }
     

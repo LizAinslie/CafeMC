@@ -1,5 +1,6 @@
 package dev.lizainslie.cafemc.protect.commands
 
+import dev.lizainslie.cafemc.chat.nicknameOrDisplayName
 import dev.lizainslie.cafemc.chat.sendRichMessage
 import dev.lizainslie.cafemc.core.cmd.AllowedSender
 import dev.lizainslie.cafemc.core.cmd.CommandContext
@@ -33,9 +34,7 @@ object LockCommand : PluginCommand(
                             text("This ") { color = NamedTextColor.GRAY }
                             text(blockName) { color = NamedTextColor.AQUA }
                             text(" is already locked by ") { color = NamedTextColor.GRAY }
-                            text(Bukkit.getOfflinePlayer(preexistingLock.ownerId).name ?: "") {
-                                color = NamedTextColor.GOLD
-                            }
+                            text(Bukkit.getOfflinePlayer(preexistingLock.ownerId).nicknameOrDisplayName())
                         }
                     
                     return@transaction sendRichError {

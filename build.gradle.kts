@@ -6,7 +6,7 @@ plugins {
 
     id("com.gradleup.shadow") version "8.3.5"
 
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.14"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.19"
     
     id("xyz.jpenilla.run-paper") version "2.3.1" // Adds runServer and runMojangMappedServer tasks for testing
     id("xyz.jpenilla.resource-factory-bukkit-convention") version "1.2.0" // Generates plugin.yml based on the Gradle config
@@ -15,7 +15,7 @@ plugins {
 group = "dev.lizainslie"
 version = "0.1.1"
 
-val minecraftVersion = "1.21.4"
+val minecraftVersion = "1.21.10"
 
 repositories {
     mavenCentral()
@@ -43,7 +43,7 @@ val exposedVersion: String by project
 
 dependencies {
     // platform
-    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.10-R0.1-SNAPSHOT")
 //    compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
@@ -56,8 +56,6 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-migration:$exposedVersion")
-    
-    // db
     
     // drivers
     implementation("org.xerial:sqlite-jdbc:3.44.1.0")
@@ -101,7 +99,7 @@ tasks.processResources {
 bukkitPluginYaml {
     main = "dev.lizainslie.cafemc.CafeMC"
     load = BukkitPluginYaml.PluginLoadOrder.STARTUP
-    apiVersion = "1.21.4"
+    apiVersion = "1.21.10"
     softDepend = listOf("TAB", "Vault")
     loadBefore = listOf("Vault")
     

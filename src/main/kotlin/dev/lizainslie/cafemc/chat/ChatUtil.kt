@@ -82,7 +82,7 @@ object ChatUtil {
             
             space()
             
-            text(component(block))
+            component(component(block))
         }
     }
     

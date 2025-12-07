@@ -123,7 +123,7 @@ object ProtectionModule : PluginModule(), Listener {
                     text(" You have broken a ") { color = NamedTextColor.GRAY }
                     text(ItemUtils.getDefaultName(block.type)) { color = NamedTextColor.LIGHT_PURPLE }
                     text(" locked by ") { color = NamedTextColor.GRAY }
-                    text(owner.nicknameOrDisplayName()) { color = NamedTextColor.BLUE }
+                    text(owner.nicknameOrDisplayName(NamedTextColor.BLUE))
                     text(". This incident has been logged & reported.") { color = NamedTextColor.GRAY }
                 }
             }

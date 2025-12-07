@@ -20,6 +20,10 @@ class ComponentDsl {
     fun text(component: Component, opts: TextOptionsDsl.() -> Unit = {}) {
         this.component = this.component.append(TextOptionsDsl(component).apply(opts).build())
     }
+
+    fun component(component: Component) {
+        this.component = this.component.append(component)
+    }
     
     fun newline() {
         component = component.append(Component.newline())

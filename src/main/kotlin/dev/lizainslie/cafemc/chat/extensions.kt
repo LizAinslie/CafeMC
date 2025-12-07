@@ -3,8 +3,10 @@ package dev.lizainslie.cafemc.chat
 import dev.lizainslie.cafemc.data.player.PlayerSettings
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextColor
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.UUID
 
 fun Collection<Component>.joinToComponent(separator: Component = Component.space()): Component {
@@ -19,8 +21,8 @@ fun Collection<Component>.joinToComponent(separator: Component = Component.space
     return c
 }
 
-fun nicknameOrDisplayName(uuid: UUID, defaultName: Component): Component {
-    val nickname = PlayerSettings.find(uuid)?.nickname
+fun nicknameOrDisplayName(uuid: UUID, defaultName: Component, nameColor: TextColor = NamedTextColor.GOLD): Component {
+    val nickname = transaction { PlayerSettings.find(uuid)?.nickname }
 
     return nickname?.let {
         component {
@@ -33,15 +35,19 @@ fun nicknameOrDisplayName(uuid: UUID, defaultName: Component): Component {
                 }
             }
         }
-    } ?: defaultName
+    } ?: component {
+        text(defaultName) { color = nameColor }
+    }
 }
 
-fun Player.nicknameOrDisplayName() = nicknameOrDisplayName(
+fun Player.nicknameOrDisplayName(nameColor: TextColor = NamedTextColor.GOLD) = nicknameOrDisplayName(
     uuid = this.uniqueId,
-    defaultName = this.displayName()
+    defaultName = this.displayName(),
+    nameColor = nameColor
 )
 
-fun OfflinePlayer.nicknameOrDisplayName() = nicknameOrDisplayName(
+fun OfflinePlayer.nicknameOrDisplayName(nameColor: TextColor = NamedTextColor.GOLD) = nicknameOrDisplayName(
     uuid = this.uniqueId,
-    defaultName = Component.text(this.name ?: "Unknown")
+    defaultName = Component.text(this.name ?: "Unknown"),
+    nameColor = nameColor
 )

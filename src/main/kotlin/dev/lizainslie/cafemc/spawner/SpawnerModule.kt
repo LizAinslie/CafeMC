@@ -61,23 +61,23 @@ object SpawnerModule : PluginModule(), Listener {
         val item = event.itemInHand
         val block = event.block
         
-        logger.info("Placed block: $block")
-        logger.info("Item in hand: $item")
-        logger.info("Item in hand meta: ${item.itemMeta}")
+//        logger.info("Placed block: $block")
+//        logger.info("Item in hand: $item")
+//        logger.info("Item in hand meta: ${item.itemMeta}")
         
         if (block.type == Material.SPAWNER && item.hasItemMeta()) {
-            logger.info("Item has meta & block is spawner")
+//            logger.info("Item has meta & block is spawner")
             val meta = item.itemMeta
             
             if (meta.persistentDataContainer.has(spawnerTypeKey, PersistentDataType.STRING)) {
-                logger.info("Item has spawner type key")
+//                logger.info("Item has spawner type key")
                 val spawnerType = meta.persistentDataContainer.get(spawnerTypeKey, PersistentDataType.STRING)!!
                 
-                logger.info("Spawner type: $spawnerType")
+//                logger.info("Spawner type: $spawnerType")
                 val spawner = block.state as CreatureSpawner
                 
                 val entityType = EntityType.entries.first { it.key().asString() == spawnerType }
-                logger.info("Entity type: $entityType")
+//                logger.info("Entity type: $entityType")
 
                 spawner.spawnedType = entityType
                 spawner.update(true)

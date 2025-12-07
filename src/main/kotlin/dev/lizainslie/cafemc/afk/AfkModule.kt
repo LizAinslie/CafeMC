@@ -98,7 +98,7 @@ object AfkModule : PluginModule(), Listener {
      */
     private fun announceAfk(player: Player, newAfkStatus: Boolean, playerFilter: (Player) -> Boolean = { it != player }) {
         ChatUtil.broadcast(false, playerFilter) {
-            text(player.nicknameOrDisplayName()) { color = NamedTextColor.GOLD }
+            component(player.nicknameOrDisplayName())
             text(" is ") { color = NamedTextColor.GRAY }
             text(nowOrNoLonger(newAfkStatus)) { color = NamedTextColor.GRAY }
             text(" AFK.") { color = NamedTextColor.GRAY }
@@ -106,7 +106,7 @@ object AfkModule : PluginModule(), Listener {
         
         ChatUtil.broadcastEmbedToDiscord {
             author {
-                name = "${player.displayName().toPlainText()} is ${nowOrNoLonger(newAfkStatus)} AFK."
+                name = "${player.nicknameOrDisplayName().toPlainText()} is ${nowOrNoLonger(newAfkStatus)} AFK."
                 iconUrl = "https://api.mineatar.io/face/${player.uniqueId}"
             }
         }
