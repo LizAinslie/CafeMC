@@ -4,6 +4,7 @@ import dev.lizainslie.cafemc.chat.ChatUtil
 import dev.lizainslie.cafemc.chat.nms.NicknameUtil
 import dev.lizainslie.cafemc.chat.sendRichMessage
 import dev.lizainslie.cafemc.chat.toPlainText
+import dev.lizainslie.cafemc.chat.validateNickname
 import dev.lizainslie.cafemc.core.cmd.AllowedSender
 import dev.lizainslie.cafemc.core.cmd.CommandContext
 import dev.lizainslie.cafemc.core.cmd.PluginCommand
@@ -40,7 +41,7 @@ object NicknameCommand : PluginCommand(
             val nickname = args.joinToString(" ")
             val nicknameComponent = ChatUtil.translateAmpersand(nickname)
 
-            if (nicknameComponent.toPlainText().length > 16) {
+            if (!validateNickname(nicknameComponent)) {
                 sendError("Nickname must be 16 characters or shorter (not including color codes)")
                 return
             }

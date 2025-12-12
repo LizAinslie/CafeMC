@@ -11,6 +11,7 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.lang.reflect.Field
 import com.mojang.authlib.GameProfile
+import dev.lizainslie.cafemc.core.modules.OnlinePlayerCacheModule
 import io.netty.buffer.Unpooled
 import me.neznamy.tab.api.TabAPI
 import net.minecraft.network.FriendlyByteBuf
@@ -29,7 +30,7 @@ import java.util.UUID
 
 object NicknameUtil {
     fun updateNickname(targetPlayer: Player, name: Component?) {
-        setPlayerNameAboveHead(targetPlayer, name?.toPlainText() ?: targetPlayer.name)
+        setPlayerNameAboveHead(targetPlayer, name?.toPlainText() ?: OnlinePlayerCacheModule[targetPlayer]?.realName ?: targetPlayer.name)
         targetPlayer.displayName(name)
         setPlayerNameInTabList(targetPlayer, name)
     }
@@ -42,7 +43,7 @@ object NicknameUtil {
             tabPlayer,
             name?.let {
                 LegacyComponentSerializer.legacyAmpersand().serialize(it)
-            } ?: player.name
+            } ?: OnlinePlayerCacheModule[player]?.realName
         )
     }
 
@@ -52,6 +53,8 @@ object NicknameUtil {
      * every other instance in which the client handles a username. Let's hope
      * it doesn't blow up and let's pray that the gods forgive me for the crimes
      * which I have herein committed
+     *
+     * Last incident: 2025/12/12
      */
     @Suppress("UNCHECKED_CAST")
     fun setPlayerNameAboveHead(targetBukkit: Player, newName: String) {

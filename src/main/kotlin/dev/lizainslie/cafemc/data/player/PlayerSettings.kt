@@ -25,5 +25,5 @@ class PlayerSettings(id: EntityID<UUID>): UUIDEntity(id) {
 object PlayerSettingsTable : UUIDTable("player_settings") {
     val home = reference("home", SavedLocationsTable).nullable()
     val lastLocation = reference("last_location", SavedLocationsTable).nullable()
-    val nickname = varchar("nickname", 128).nullable()
+    val nickname = varchar("nickname", 64).nullable()
 }
