@@ -38,6 +38,12 @@ object NicknameCommand : PluginCommand(
             }
         } else {
             val nickname = args.joinToString(" ")
+            val nicknameComponent = ChatUtil.translateAmpersand(nickname)
+
+            if (nicknameComponent.toPlainText().length > 16) {
+                sendError("Nickname must be 16 characters or shorter (not including color codes)")
+                return
+            }
 
             transaction {
                 val playerSettings = PlayerSettings.findOrCreate(player)
@@ -45,8 +51,6 @@ object NicknameCommand : PluginCommand(
             }
 
             OnlinePlayerCacheModule.refreshPlayerSettings(player)
-
-            val nicknameComponent = ChatUtil.translateAmpersand(nickname)
             NicknameUtil.updateNickname(player, nicknameComponent)
 
             player.sendRichMessage {
