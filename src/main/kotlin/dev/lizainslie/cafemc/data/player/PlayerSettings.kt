@@ -3,6 +3,7 @@ package dev.lizainslie.cafemc.data.player
 import dev.lizainslie.cafemc.data.location.SavedLocation
 import dev.lizainslie.cafemc.data.location.SavedLocationsTable
 import org.bukkit.entity.Player
+import org.jetbrains.exposed.dao.EntityBatchUpdate
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

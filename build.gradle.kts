@@ -67,6 +67,7 @@ dependencies {
     compileOnly("com.github.NEZNAMY:TAB-API:5.3.2")
     compileOnly("com.discordsrv:discordsrv:1.28.0")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
+    compileOnly("net.dmulloy2:ProtocolLib:5.4.0") // packets :agony:
     
     // http
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
@@ -102,6 +103,7 @@ bukkitPluginYaml {
     apiVersion = "1.21.10"
     softDepend = listOf("TAB", "Vault")
     loadBefore = listOf("Vault")
+    depend = listOf("ProtocolLib")
     
     authors = listOf("LizzyTheWitch")
     

@@ -76,6 +76,8 @@ object TeleportModule : PluginModule(), Listener {
                             }
                             
                             removeRequest(sender, target)
+
+                            sender.saveLastLocation()
                             sender.teleport(target)
                         } ?: run {
                             target.sendRichError {

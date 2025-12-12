@@ -1,10 +1,13 @@
 package dev.lizainslie.cafemc.chat.commands
 
 import dev.lizainslie.cafemc.chat.ChatUtil
+import dev.lizainslie.cafemc.chat.nms.NicknameUtil
 import dev.lizainslie.cafemc.chat.sendRichMessage
+import dev.lizainslie.cafemc.chat.toPlainText
 import dev.lizainslie.cafemc.core.cmd.AllowedSender
 import dev.lizainslie.cafemc.core.cmd.CommandContext
 import dev.lizainslie.cafemc.core.cmd.PluginCommand
+import dev.lizainslie.cafemc.core.modules.OnlinePlayerCacheModule
 import dev.lizainslie.cafemc.data.player.PlayerSettings
 import net.kyori.adventure.text.format.NamedTextColor
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -25,6 +28,9 @@ object NicknameCommand : PluginCommand(
                 playerSettings.nickname = null
             }
 
+            OnlinePlayerCacheModule.refreshPlayerSettings(player)
+            NicknameUtil.updateNickname(player, null)
+
             player.sendRichMessage {
                 text("Your nickname has been reset.") {
                     color = NamedTextColor.GRAY
@@ -38,11 +44,16 @@ object NicknameCommand : PluginCommand(
                 playerSettings.nickname = nickname
             }
 
+            OnlinePlayerCacheModule.refreshPlayerSettings(player)
+
+            val nicknameComponent = ChatUtil.translateAmpersand(nickname)
+            NicknameUtil.updateNickname(player, nicknameComponent)
+
             player.sendRichMessage {
                 text("Your nickname has been set to ") {
                     color = NamedTextColor.GRAY
                 }
-                component(ChatUtil.translateAmpersand(nickname))
+                component(nicknameComponent)
                 text(".") {
                     color = NamedTextColor.GRAY
                 }

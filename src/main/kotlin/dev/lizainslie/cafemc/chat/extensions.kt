@@ -1,5 +1,6 @@
 package dev.lizainslie.cafemc.chat
 
+import dev.lizainslie.cafemc.core.modules.OnlinePlayerCacheModule
 import dev.lizainslie.cafemc.data.player.PlayerSettings
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -41,13 +42,14 @@ fun nicknameOrDisplayName(uuid: UUID, defaultName: Component, nameColor: TextCol
 }
 
 fun Player.nicknameOrDisplayName(nameColor: TextColor = NamedTextColor.GOLD) = nicknameOrDisplayName(
-    uuid = this.uniqueId,
-    defaultName = this.displayName(),
+    uuid = uniqueId,
+    // try to get real name from online player cache, then fall back.
+    defaultName = Component.text(OnlinePlayerCacheModule[uniqueId]?.realName ?: name),
     nameColor = nameColor
 )
 
 fun OfflinePlayer.nicknameOrDisplayName(nameColor: TextColor = NamedTextColor.GOLD) = nicknameOrDisplayName(
-    uuid = this.uniqueId,
-    defaultName = Component.text(this.name ?: "Unknown"),
+    uuid = uniqueId,
+    defaultName = Component.text(name ?: "Unknown"),
     nameColor = nameColor
 )

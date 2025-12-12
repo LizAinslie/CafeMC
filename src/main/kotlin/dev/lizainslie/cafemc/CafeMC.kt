@@ -7,6 +7,7 @@ import dev.lizainslie.cafemc.auditing.AuditModule
 import dev.lizainslie.cafemc.chat.ChatModule
 import dev.lizainslie.cafemc.core.cmd.CommandMap
 import dev.lizainslie.cafemc.commands.RenameCommand
+import dev.lizainslie.cafemc.core.modules.OnlinePlayerCacheModule
 import dev.lizainslie.cafemc.data.commands.MigrateCommand
 import dev.lizainslie.cafemc.data.migrate
 import dev.lizainslie.cafemc.economy.EconomyModule
@@ -29,6 +30,7 @@ class CafeMC : JavaPlugin() {
     private val commandMap = CommandMap()
     private val config = getConfig()
     private val modules = listOf(
+        OnlinePlayerCacheModule,
         AuditModule,
         ChatModule,
         TeleportModule,

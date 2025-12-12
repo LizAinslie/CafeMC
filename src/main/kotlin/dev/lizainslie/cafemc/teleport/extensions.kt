@@ -3,6 +3,7 @@ package dev.lizainslie.cafemc.teleport
 import dev.lizainslie.cafemc.CafeMC
 import dev.lizainslie.cafemc.chat.sendRichError
 import dev.lizainslie.cafemc.chat.sendRichMessage
+import dev.lizainslie.cafemc.core.modules.OnlinePlayerCacheModule
 import dev.lizainslie.cafemc.data.location.SavedLocation
 import dev.lizainslie.cafemc.data.player.PlayerSettings
 import net.kyori.adventure.text.event.ClickEvent
@@ -13,52 +14,67 @@ import org.bukkit.metadata.FixedMetadataValue
 import org.jetbrains.exposed.sql.transactions.transaction
 
 fun Player.saveLastLocation(from: Location = location) {
-    if (hasPermission("cafe.tpa.back"))
-        transaction {
-            val settings = PlayerSettings.findOrCreate(this@saveLastLocation)
-            
-            if (settings.lastLocation != null) {
+    if (hasPermission("cafe.tpa.back")) {
+        val settings = transaction { PlayerSettings.findOrCreate(this@saveLastLocation) }
+
+        if (transaction { settings.lastLocation } != null) {
+            transaction {
                 settings.lastLocation!!.delete()
                 settings.lastLocation = null
             }
-            
-            settings.lastLocation = SavedLocation.findOrCreate(from)
-            
-            sendRichMessage { 
-                text("Last location saved. ") { color = NamedTextColor.GRAY }
-                text("[Go Back]") {
-                    color = NamedTextColor.GOLD
 
-                    events {
-                        click = ClickEvent.callback {
-                            goToLastLocation()
-                        }
+            OnlinePlayerCacheModule.refreshPlayerSettings(uniqueId)
+        }
+
+        transaction {
+            settings.lastLocation = SavedLocation.findOrCreate(from)
+        }
+
+        OnlinePlayerCacheModule.refreshPlayerSettings(uniqueId)
+
+        sendRichMessage {
+            text("Last location saved. ") { color = NamedTextColor.GRAY }
+            text("[Go Back]") {
+                color = NamedTextColor.GOLD
+
+                events {
+                    click = ClickEvent.callback {
+                        goToLastLocation()
                     }
                 }
             }
         }
+    }
 }
 
 internal fun Player.goToLastLocation() {
-    val me = this
-    transaction {
-        val settings = PlayerSettings.find(me)
-        settings?.lastLocation?.let {
-            val location = it.location // get a Bukkit location
+    val settings = transaction { PlayerSettings.find(uniqueId) }
+    if (settings == null) {
+        sendRichError {
+            text("No previous location saved.")
+        }
+        return
+    }
+    transaction { settings.lastLocation }?.let {
+        val location = it.location // get a Bukkit location
 
-            // Delete the previous location in db
+        // Delete the previous location in db
+        transaction {
             it.delete()
             settings.lastLocation = null
+        }
+        OnlinePlayerCacheModule.refreshPlayerSettings(uniqueId)
 
-            // Set metadata to prevent teleporting back again
-            me.setMetadata("teleporting_back", FixedMetadataValue(CafeMC.instance, true))
+        // Set metadata to prevent teleporting back again
+        setMetadata("teleporting_back", FixedMetadataValue(CafeMC.instance, true))
 
-            // Teleport the player to the previous location
-            me.teleport(location)
+        // Teleport the player to the previous location
+        teleport(location)
 
-            me.sendRichMessage {
-                text("Teleported to your previous location.") { color = NamedTextColor.GRAY }
-            }
-        } ?: me.sendRichError { text("No previous location saved.") }
+        sendRichMessage {
+            text("Teleported to your previous location.") { color = NamedTextColor.GRAY }
+        }
+    } ?: sendRichError {
+        text("No previous location saved.")
     }
 }
